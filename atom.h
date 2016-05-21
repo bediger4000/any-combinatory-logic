@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: atom.h,v 1.2 2010/04/02 03:43:39 bediger Exp $ */
+/* $Id: atom.h,v 1.3 2011/06/12 18:19:11 bediger Exp $ */
 
 void        setup_atom_table(struct hashtable *h);
 const char *Atom_string(const char *str);

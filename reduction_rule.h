@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 

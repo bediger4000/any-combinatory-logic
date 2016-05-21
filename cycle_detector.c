@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: cycle_detector.c,v 1.3 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: cycle_detector.c,v 1.6 2011/06/12 18:22:01 bediger Exp $ */
 
 /*
  * Code to detect a reduction cycle that occurs
@@ -102,13 +102,8 @@ cycle_detector(struct node *root, int max_redex_count)
 			int new_size = cycle_stack_size + 10;
 			char **new_array = realloc(cycle_stack, new_size*sizeof(cycle_stack[0]));
 
-			if (new_array)
-			{
-				cycle_stack = new_array;
-				cycle_stack_size = new_size;
-			}
-			/* If realloc() returns NULL, something's gone haywire.
-			 * Not sure what to do here. */
+			cycle_stack = new_array;
+			cycle_stack_size = new_size;
 		}
 
 		cycle_stack[cycle_stack_depth++] = graph;
@@ -155,8 +150,6 @@ canonicalize(struct node *node, struct buffer *b)
 		break;
 	case ATOM:
 		buffer_append(b, node->name, strlen(node->name));
-		break;
-	default:
 		break;
 	}
 }

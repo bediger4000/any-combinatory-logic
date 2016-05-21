@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: brack.c,v 1.5 2010/08/12 20:12:49 bediger Exp $ */
+/* $Id: brack.c,v 1.10 2011/06/12 18:22:00 bediger Exp $ */
 
 /*
  * Generalized bracket abstraction.  Externally-visible unctions to:
@@ -38,6 +38,7 @@
 #include <brack.h>
 #include <aho_corasick.h>
 #include <buffer.h>
+#include <graph.h>
 
 /*
  * Functions and variables to calculate all the root-to-leaves
@@ -115,12 +116,13 @@ perform_bracket_abstraction(const char *var, struct node *expr)
 	struct node *r = NULL;
 	int idx, subject_node_count = 0;
 
-	renumber(expr, &subject_node_count);
+	subject_node_count = node_count(expr, 1);
 
 	for (idx = 0; idx < rule_cnt; ++idx)
 	{
-		int matched = algorithm_d(rules[idx]->g, expr, subject_node_count, rules[idx]->pat_path_cnt, var);
 		int repl_cnt = 0;
+		int matched = algorithm_d(rules[idx]->g, expr,
+			subject_node_count, rules[idx]->pat_path_cnt, var);
 
 		if (matched)
 		{
@@ -129,7 +131,6 @@ perform_bracket_abstraction(const char *var, struct node *expr)
 
 			if (trace_reduction) print_rule(rules[idx], expr);
 
-			/* fill in replacements array */
 			fill_in_replacements(rules[idx]->pattern, expr,
 				replacements, &repl_cnt);
 
@@ -443,6 +444,7 @@ calculate_strings(struct abs_node *node, struct buffer *b)
 				break;
 			case '+':
 			case '-':
+			case '!':
 				sprintf(pattern_string, "%s%c", buf, node->label[1]);
 				break;
 			}
@@ -458,12 +460,8 @@ calculate_strings(struct abs_node *node, struct buffer *b)
 			else
 				tmp = malloc(alloc_bytes);
 
-			if (tmp)
-			{
-				paths = tmp;
-				path_cnt += 4;
-			} else
-				fprintf(stderr, "Failed to alloc/realloc pattern paths array, size %d\n", path_cnt + 4);
+			paths = tmp;
+			path_cnt += 4;
 		}
 
 		/* XXX - If a realloc() fails, this could overwrite paths[] */

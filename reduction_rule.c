@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -100,22 +100,19 @@ void
 print_reduction_tree(struct reduction_rule_node *node)
 {
 	int print_match_paren = 0;
-	if (node)
+	if (node->func)
 	{
-		if (node->func)
+		print_reduction_tree(node->func);
+		printf(" ");
+		if (!node->arg->combinator_argument_number)
 		{
-			print_reduction_tree(node->func);
-			printf(" ");
-			if (!node->arg->combinator_argument_number)
-			{
-				printf("(");
-				print_match_paren = 1;
-			}
+			printf("(");
+			print_match_paren = 1;
 		}
-		if (node->combinator_argument_number) printf("%d", node->combinator_argument_number);
-		if (node->arg) print_reduction_tree(node->arg);
-		if (print_match_paren) printf(")");
 	}
+	if (node->combinator_argument_number) printf("%d", node->combinator_argument_number);
+	if (node->arg) print_reduction_tree(node->arg);
+	if (print_match_paren) printf(")");
 }
 
 void
@@ -123,16 +120,8 @@ add_reduction_rule(struct reduction_rule *rule)
 {
 	if (number_of_rules >= max_number_of_rules)
 	{
-		struct reduction_rule **tmp = rules;
 		rules = realloc(rules, (max_number_of_rules + 4)*sizeof(*rules));
-		if (rules)
-			max_number_of_rules += 4;
-		else {
-			/* Message for this case down below. */
-			rules = tmp;
-			free_reduction_rule(rule);
-		}
-		tmp = NULL;
+		max_number_of_rules += 4;
 	}
 
 	if (number_of_rules < max_number_of_rules)
@@ -155,9 +144,6 @@ add_reduction_rule(struct reduction_rule *rule)
 			prev = NULL;
 		} else
 			rules[number_of_rules++] = rule;
-	} else {
-		/* This branch executes if realloc() above fails. */
-		printf("Failed to add new rule for %s\n", rule->name);
 	}
 }
 

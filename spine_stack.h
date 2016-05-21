@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -19,7 +19,7 @@
 
 */
 
-/* $Id: spine_stack.h,v 1.3 2010/07/19 17:55:40 bediger Exp $ */
+/* $Id: spine_stack.h,v 1.5 2011/06/12 18:19:11 bediger Exp $ */
 
 struct spine_stack_element {
 	struct node *node;
@@ -36,7 +36,7 @@ struct spine_stack {
 struct spine_stack *new_spine_stack(int sz);
 void pushnode(struct spine_stack *ss, struct node *n, int mark);
 void delete_spine_stack(struct spine_stack *ss);
-void free_all_spine_stacks(int memory_info_flag);
+void free_all_spine_stacks(void);
 
 #define TOPNODE(ss) ((ss)->stack[(ss)->top - 1].node)
 #define DEPTH(ss) ((ss)->stack[(ss)->top - 1].depth)

@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: cycle_detector.h,v 1.3 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: cycle_detector.h,v 1.4 2011/06/12 18:19:11 bediger Exp $ */
 
 void reset_detection(void);
 void free_detection(void);

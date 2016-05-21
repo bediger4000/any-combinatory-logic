@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -19,7 +19,7 @@
 
 */
 
-/* $Id: spine_stack.c,v 1.4 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: spine_stack.c,v 1.7 2011/06/12 18:22:01 bediger Exp $ */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -98,26 +98,13 @@ pushnode(struct spine_stack *ss, struct node *n, int mark)
 		size_t new_size = ss->size * 2;  /* XXX !!! */
 		++spine_stack_resizes;
 		ss->stack = realloc(old_stack, sizeof(struct spine_stack_element)*new_size);
-		if (!ss->stack)
-			ss->stack = old_stack;  /* realloc failed */
-		else
-			ss->size = new_size;
+		ss->size = new_size;
 	}
 }
 
 void
-free_all_spine_stacks(int memory_info_flag)
+free_all_spine_stacks(void)
 {
-	if (memory_info_flag)
-	{
-		fprintf(stderr, "Resized spine stack %d times\n", spine_stack_resizes);
-		if (old_spine_stack)
-		{
-			fprintf(stderr, "Spine stack size %d elements\n", old_spine_stack->size);
-			fprintf(stderr, "Spine stack reached max depth of %d\n", old_spine_stack->maxdepth);
-		}
-	}
-
 	if (old_spine_stack)
 	{
 		free(old_spine_stack->stack);

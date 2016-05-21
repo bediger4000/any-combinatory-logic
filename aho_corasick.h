@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: aho_corasick.h,v 1.2 2010/07/19 17:55:40 bediger Exp $ */
+/* $Id: aho_corasick.h,v 1.3 2011/06/12 18:19:11 bediger Exp $ */
 
 struct output_extent {
 	int   *out;   /* array of int, lengths of matched paths */

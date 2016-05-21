@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,11 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: arena.h,v 1.2 2010/04/02 03:43:39 bediger Exp $ */
+/* $Id: arena.h,v 1.5 2011/06/12 18:19:11 bediger Exp $ */
 
-struct memory_arena *new_arena(int memory_info_flag);
+struct memory_arena *new_arena(void);
 void free_arena_contents(struct memory_arena *ma);
-void deallocate_arena(struct memory_arena *ma, int memory_info_flag);
+void deallocate_arena(struct memory_arena *ma);
 
 void *arena_alloc(struct memory_arena *ma, size_t size);
 

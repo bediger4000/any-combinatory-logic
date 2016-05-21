@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: graph.c,v 1.9 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: graph.c,v 1.12 2011/06/12 18:22:01 bediger Exp $ */
 
 #include <stdio.h>
 #include <stdlib.h>  /* malloc() and free() */
@@ -95,7 +95,7 @@ reduce_graph(struct node *root)
 		int pop_stack_cnt = 1;
 		int performed_reduction = 0;
 		struct node *topnode = TOPNODE(stack);
-		const char *atom_name;
+		const char *atom_name = NULL;
 
 		switch (topnode->typ)
 		{
@@ -340,19 +340,16 @@ node_count(struct node *node, int count_interior_nodes)
 {
 	int count = 0;
 
-	if (node)
+	switch (node->typ)
 	{
-		switch (node->typ)
-		{
-		case APPLICATION:
-			if (count_interior_nodes) ++count;
-			count += node_count(node->left, count_interior_nodes);
-			count += node_count(node->right, count_interior_nodes);
-			break;
-		case ATOM:
-			count = 1;
-			break;
-		}
+	case APPLICATION:
+		if (count_interior_nodes) ++count;
+		count += node_count(node->left, count_interior_nodes);
+		count += node_count(node->right, count_interior_nodes);
+		break;
+	case ATOM:
+		count = 1;
+		break;
 	}
 
 	return count;

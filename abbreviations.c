@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -20,7 +20,7 @@
 */
 
 
-/* $Id: abbreviations.c,v 1.6 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: abbreviations.c,v 1.8 2011/06/12 18:22:00 bediger Exp $ */
 
 /*
  * Abbreviations: an identifier can reference an entire parse tree
@@ -60,7 +60,11 @@ abbreviation_lookup(const char *id)
 	/* make an arena-allocated copy of the abbreviation, so that
 	 * reduce_graph() can destructively reduce the resulting
 	 * parse tree. */
-	if (p) r = arena_copy_graph((struct node *)p);
+	if (p)
+	{
+		preallocate_nodes(((struct node *)p)->tree_size);
+		r = arena_copy_graph((struct node *)p);
+	}
 	return r;
 }
 
@@ -112,10 +116,12 @@ copy_graph(struct node *p)
 	case APPLICATION:
 		r->left = copy_graph(p->left);
 		r->right = copy_graph(p->right);
+		r->tree_size = r->left->tree_size + r->right->tree_size + 1;
 		break;
 	case ATOM:
 		r->rule = p->rule;
 		r->left = r->right = NULL;
+		r->tree_size = 1;
 		break;
 	}
 	return r;

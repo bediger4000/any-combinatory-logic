@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: aho_corasick.c,v 1.3 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: aho_corasick.c,v 1.8 2011/06/12 18:22:00 bediger Exp $ */
 
 /*
  *  This code based on:
@@ -56,6 +56,7 @@ struct stack_elem {
 	struct node *n; /* 1 */
 	int state_at_n; /* 2 */
 	int visited;    /* 3 */
+	int node_number;
 };
 
 void set_output_length(struct gto *p, int state, int node_count);
@@ -258,7 +259,6 @@ construct_failure(struct gto *g)
 	int i;
 	struct queue *q;
 
-
 	g->failure = malloc(g->ary_len * sizeof(int));
 
 	for (i = 0; i < g->ary_len; ++i)
@@ -394,6 +394,7 @@ algorithm_d(struct gto *g, struct node *t, int subject_node_count, int pat_path_
 {
 	int top = 1;
 	int matched = 0;
+	int breadth_counter = 0;
 	int next_state;
 	int i;
 	int *count;
@@ -415,23 +416,34 @@ algorithm_d(struct gto *g, struct node *t, int subject_node_count, int pat_path_
 	stack[top].n = t;
 	stack[top].state_at_n = next_state;
 	stack[top].visited = 0;
+	stack[top].node_number = breadth_counter++;
 
 	matched += tabulate(g, stack, top, next_state, pat_path_cnt, count);
 
 	if (!matched)
 	{
-		if (var_in_tree(t, abstr_var_name))
-			next_state = g->delta[0][(int)'+'];
-		else
-			next_state = g->delta[0][(int)'-'];
-
-		matched += tabulate(g, stack, top, next_state, pat_path_cnt, count);
+		if (any_var_in_tree(t))
+		{
+		  	if (var_in_tree(t, abstr_var_name))
+				next_state = g->delta[0][(int)'+'];
+			else
+				next_state = g->delta[0][(int)'-'];
+			matched += tabulate(g, stack, top, next_state, pat_path_cnt, count);
+		} else {
+			next_state = g->delta[0][(int)'!'];
+			matched += tabulate(g, stack, top, next_state, pat_path_cnt, count);
+			if (!matched)
+			{
+				next_state = g->delta[0][(int)'-'];
+				matched += tabulate(g, stack, top, next_state, pat_path_cnt, count);
+			}
+		}
 	}
 
 	while (!matched && top > 0)
 	{
 		struct node *next_node, *this_node = stack[top].n;
-		int intstate, next_state, this_state = stack[top].state_at_n;
+		int intstate, nxt_st, this_state = stack[top].state_at_n;
 		int visited = stack[top].visited;
 
 		if (visited == 2 || this_node->typ == ATOM || top > g->max_node_count)
@@ -444,27 +456,35 @@ algorithm_d(struct gto *g, struct node *t, int subject_node_count, int pat_path_
 			matched += tabulate(g, stack, top, intstate, pat_path_cnt, count);
 
 			next_node = (visited == 1)? this_node->left: this_node->right;
-			next_state = intstate;
+			nxt_st = intstate;
 
 			p = (next_node->name != abstr_var_name)? next_node->name: abstr_meta_var;
 			while (*p)
-				next_state = g->delta[next_state][(int)*p++];
+				nxt_st = g->delta[nxt_st][(int)*p++];
 
 			++top;
 			stack[top].n = next_node;
-			stack[top].state_at_n = next_state;
+			stack[top].state_at_n = nxt_st;
 			stack[top].visited = 0;
+			stack[top].node_number = breadth_counter++;
 
 			if (top <= g->max_node_count)
 			{
-				matched += tabulate(g, stack, top, next_state, pat_path_cnt, count);
+				matched += tabulate(g, stack, top, nxt_st, pat_path_cnt, count);
 
-				if (var_in_tree(next_node, abstr_var_name))
-					next_state = g->delta[intstate][(int)'+'];
-				else
-					next_state = g->delta[intstate][(int)'-'];
+				if (any_var_in_tree(next_node))
+				{
+					if (var_in_tree(next_node, abstr_var_name))
+						nxt_st = g->delta[intstate][(int)'+'];
+					else
+						nxt_st = g->delta[intstate][(int)'-'];
+				} else {
+					nxt_st = g->delta[intstate][(int)'!'];
+					if (0 == nxt_st)
+						nxt_st = g->delta[intstate][(int)'-'];
+				}
 
-				matched += tabulate(g, stack, top, next_state, pat_path_cnt, count);
+				matched += tabulate(g, stack, top, nxt_st, pat_path_cnt, count);
 			}
 		}
 	}
@@ -494,11 +514,11 @@ tabulate(struct gto *g, struct stack_elem *stack, int top, int state, int pat_le
 
 	for (i = 0; r == 0 && i < oxt->len; ++i)
 	{
-		struct node *n = stack[top - oxt->out[i] + 1].n;
+		int idx = top - oxt->out[i] + 1;
 
-		++count[n->node_number];
+		++count[stack[idx].node_number];
 
-		if (count[n->node_number] == pat_leaf_count)
+		if (count[stack[idx].node_number] == pat_leaf_count)
 			r = 1;
 	}
 

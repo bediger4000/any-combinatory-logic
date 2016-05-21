@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -19,7 +19,7 @@
 
 */
 
-/* $Id: node.c,v 1.7 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: node.c,v 1.13 2011/06/12 18:22:01 bediger Exp $ */
 
 /*
  * struct node: main data structure of this interpreter.
@@ -103,7 +103,6 @@ new_term(const char *name)
 
 	r->typ = ATOM;
 	r->name = name;
-	if (!r->name) r->name = "NULL";
 
 	return r;
 }
@@ -117,11 +116,7 @@ print_tree(struct node *node, int reduction_node_sn, int current_node_sn)
 
 		if (!node->left && !node->right) return;
 
-		if (node != node->left)
-			print_tree(node->left, reduction_node_sn, current_node_sn);
-		else
-			printf("Left application loop: {%d}->{%d}\n",
-				node->sn, node->left->sn);
+		print_tree(node->left, reduction_node_sn, current_node_sn);
 		
 		if (elaborate_output)
 		{
@@ -137,24 +132,19 @@ print_tree(struct node *node, int reduction_node_sn, int current_node_sn)
 				putc(' ', stdout);
 		}
 
-		if (node != node->right)
+		if (node->right)
 		{
-			if (node->right)
+			int print_right_paren = 0;
+			if (APPLICATION == node->right->typ)
 			{
-				int print_right_paren = 0;
-				if (APPLICATION == node->right->typ)
-				{
-					putc('(', stdout);
-					print_right_paren = 1;
-				}
-				print_tree(node->right, reduction_node_sn, current_node_sn);
-				if (print_right_paren)
-					putc(')', stdout);
-			} else if (elaborate_output)
-				printf(" {%d}", node->sn);
-		} else
-			printf("Right application loop: {%d}->{%d}\n",
-				node->sn, node->right->sn);
+				putc('(', stdout);
+				print_right_paren = 1;
+			}
+			print_tree(node->right, reduction_node_sn, current_node_sn);
+			if (print_right_paren)
+				putc(')', stdout);
+		} else if (elaborate_output)
+			printf(" {%d}", node->sn);
 
 		break;
 	case ATOM:
@@ -167,9 +157,6 @@ print_tree(struct node *node, int reduction_node_sn, int current_node_sn)
 			);
 		if (node->sn == current_node_sn)
 			putc('+', stdout);
-		break;
-	default:
-		printf("Unknown %d {%d}", node->typ, node->sn);
 		break;
 	}
 }
@@ -200,29 +187,21 @@ new_node(void)
 	r->name = NULL;
 	r->updateable = NULL;
 	r->refcnt = 0;
+	r->tree_size = 0;
 
 	return r;
 }
 
 void
-free_all_nodes(int memory_info_flag)
+free_all_nodes(void)
 {
-
-	if (memory_info_flag)
-	{
-		fprintf(stderr, "Gave out %d nodes of %d bytes each in toto.\n",
-			new_node_cnt, sizeof(struct node));
-		fprintf(stderr, "%d nodes allocated from arena, %d from free list\n",
-			sn_counter, reused_node_count);
-			
-	}
-	deallocate_arena(arena, memory_info_flag);
+	deallocate_arena(arena);
 }
 
 void
-init_node_allocation(int memory_info_flag)
+init_node_allocation(void)
 {
-	arena = new_arena(memory_info_flag);
+	arena = new_arena();
 }
 
 void
@@ -320,7 +299,7 @@ print_abs_node(struct abs_node *n)
 		}
 		print_abs_node(n->left);
 		putc(' ', stdout);
-		if (APPLICATION == n->right->typ)
+		if (abs_APPLICATION == n->right->typ)
 		{
 			putc('(', stdout);
 			++print_right_paren;
@@ -361,27 +340,9 @@ new_abs_application(struct abs_node *lft, struct abs_node *rght)
 	return r;
 }
 
-void
-print_node_abs(struct abs_node *root)
-{
-	print_abs_node(root);
-	putc('\n', stdout);
-}
 
-/* number (from 0) all the nodes in a *subject* tree */
-void
-renumber(struct node *node, int *n)
-{
-	node->node_number = *n;
-	++*n;
-
-	if (abs_APPLICATION == node->typ)
-	{
-		renumber(node->left, n);
-		renumber(node->right, n);
-	}
-}
-
+/* Return true if a specific (var_name) variable occurs
+ * in this node or any under it. */
 int
 var_in_tree(struct node *node, const char *var_name)
 {
@@ -401,6 +362,29 @@ var_in_tree(struct node *node, const char *var_name)
 	return r;
 }
 
+/* Return true if any variable (non-primitive, as specified by rule:
+ * interpreter command) appears in this node or any underneath it. */
+int
+any_var_in_tree(struct node *node)
+{
+	int r = 0;
+
+	switch (node->typ)
+	{
+	case APPLICATION:
+		r = any_var_in_tree(node->left)
+			|| any_var_in_tree(node->right);
+		break;
+	case ATOM:
+		/* Just like in graph.c, if node->rule contains non-NULL,
+		 * this node counts as a primitive. */
+		r = !node->rule;
+		break;
+	}
+
+	return r;
+}
+
 void
 free_abs_node(struct abs_node *tree)
 {
@@ -410,4 +394,26 @@ free_abs_node(struct abs_node *tree)
 		free_abs_node(tree->right);
 		free(tree);
 	}
+}
+
+void
+preallocate_nodes(int pre_node_count)
+{
+	size_t sz = pre_node_count * sizeof(struct node);
+	struct node *node_ary = arena_alloc(arena, sz);
+	int i;
+
+	allocated_node_count += pre_node_count;
+
+	for (i = 0; i < pre_node_count; ++i)
+	{
+		struct node *n = &node_ary[i];
+		n->sn = ++sn_counter;
+		n->right_addr = &(n->right);
+		n->left_addr = &(n->left);
+		n->right = &node_ary[i+1];
+		n->tree_size = 0;
+	}
+	node_ary[pre_node_count - 1].right = node_free_list;
+	node_free_list = &node_ary[0];
 }

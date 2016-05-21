@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,24 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: cb.h,v 1.2 2010/07/19 17:55:40 bediger Exp $ */
-
-#define CBUFSIZE 0x200  /* 512 */
-#define CBUFMASK 0x1ff  /* 512 - 1 */
-
-struct queue_node {
-	int state;
-	struct queue_node *next;
-};
-
-struct queue {
-	int *cbuf;
-	int  in;
-	int  out;
-	struct queue_node *ovfhead;
-	struct queue_node *ovftail;
-};
-
+/* $Id: cb.h,v 1.3 2011/06/12 18:19:11 bediger Exp $ */
 
 struct queue *queueinit(void);
 void queuedestroy(struct queue *);

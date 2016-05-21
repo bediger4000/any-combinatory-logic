@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: cb.c,v 1.3 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: cb.c,v 1.5 2011/06/12 18:22:01 bediger Exp $ */
 
 /*
  * A First-in, Last-out Queue, implemented as a circular buffer.
@@ -34,9 +34,33 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #include <cb.h>
+
+/*
+ * These two need to constitute 2 bit patterns:
+ * CBUFSIZE  100...0
+ * CBUFMASK   11...1
+ *
+ * Actual value of CBUFSIZE mostly constitutes a guess. I think that
+ * the enqueue and dequeue operations will slow down somewhat when
+ * the circular buffer, sized by CBUFSIZE, overflows.
+ */
+#define CBUFSIZE 0x20
+#define CBUFMASK 0x1f
+
+struct queue_node {
+	int state;
+	struct queue_node *next;
+};
+
+struct queue {
+	int *cbuf;
+	int  in;
+	int  out;
+	struct queue_node *ovfhead;
+	struct queue_node *ovftail;
+};
 
 struct queue *
 queueinit()
@@ -44,10 +68,8 @@ queueinit()
 	struct queue *r;
 
 	r = malloc(sizeof(*r));
-	assert(NULL != r);
 
 	r->cbuf = malloc(CBUFSIZE*sizeof(int));
-	assert(NULL != r->cbuf);
 
 	r->in = 0;
 	r->out = 0;
@@ -57,29 +79,18 @@ queueinit()
 }
 
 void
-empty_error(struct queue *q)
-{
-	fprintf(stderr, "Tried to get off empty queue: in %d, out %d\n", q->in, q->out);
-	exit(9);
-}
-
-void
 enqueue(struct queue *q, int state)
 {
 	struct queue_node *newnode;
 
-	assert(NULL != q);
-
 	if (((q->in + 1)&CBUFMASK) != q->out)
 	{
-		assert(NULL != q->cbuf);
 		q->cbuf[q->in] = state;
 		q->in = (q->in+1)&CBUFMASK;
 
 	} else {
 
 		newnode = malloc(sizeof *newnode);
-		assert(NULL != newnode);
 		newnode->state = state;
 		newnode->next = NULL;
 
@@ -96,7 +107,6 @@ enqueue(struct queue *q, int state)
 int
 queueempty(struct queue *q)
 {
-	assert(NULL != q);
 	return (q->in == q->out);
 }
 
@@ -105,10 +115,6 @@ dequeue(struct queue *q)
 {
 	int r;
 
-	assert(NULL != q);
-	if (q->in == q->out) empty_error(q);
-
-	assert(NULL != q->cbuf);
 	r = q->cbuf[q->out];
 
 	q->out = (q->out + 1)&CBUFMASK;
@@ -131,10 +137,13 @@ dequeue(struct queue *q)
 void
 queuedestroy(struct queue *q)
 {
-	assert(NULL != q);
+	free(q->cbuf);
 
-	if (NULL != q->cbuf) free(q->cbuf);
-
+	/* I don't think this while-loop ever gets executed:
+	 * the code in aho_corasick.c never destroys anything
+	 * other than an empty queue.  An abstraction rule that
+	 * overflows the circular buffer part of this queue should
+	 * never have any "overflow" when it gets deleted. */
 	while (NULL != q->ovfhead)
 	{
 		struct queue_node *t = q->ovfhead->next;

@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: hashtable.h,v 1.2 2010/04/02 03:43:39 bediger Exp $ */
+/* $Id: hashtable.h,v 1.4 2011/06/12 18:19:11 bediger Exp $ */
 
 struct hashnode {
 	struct hashnode *next, *prev;  /* hash chain */
@@ -48,15 +48,13 @@ struct hashtable {
 	
 	struct hashnode **buckets;    /* array of hash chains */
 	struct hashnode **sentinels;  /* array of hash chains */
-
-	int flags;
 };
 
 /* number of buckets has to be a power of 2 for this to work */
 #define MOD(x,y)        ((x) & ((y)-1))
 
 const char *add_string(struct hashtable *h, const char *key);
-void *add_data(struct hashtable *h, const char *key, void *data);
+/* void *add_data(struct hashtable *h, const char *key, void *data); */
 void *data_lookup(struct hashtable *h, const char *key_string);
 struct hashnode *node_lookup(
 	struct hashtable *h, const char *string_to_lookup, unsigned int *hashval

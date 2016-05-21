@@ -1,6 +1,6 @@
 %{
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -20,7 +20,7 @@
 
 */
 
-/* $Id: grammar.y,v 1.15 2010/08/12 20:12:49 bediger Exp $ */
+/* $Id: grammar.y,v 1.20 2011/06/12 18:22:01 bediger Exp $ */
 
 
 #include <stdio.h>
@@ -58,7 +58,6 @@ int elaborate_output = 0;
 int trace_reduction  = 0;
 int reduction_timer  = 0;
 int single_step      = 0;
-int memory_info      = 0;
 int count_reductions = 0;    /* produce a count of reductions */
 
 int found_binary_command = 0;  /* lex and yacc coordinate on these */
@@ -144,10 +143,10 @@ extern int yyparse(void);
 }
 
 
-%token TK_ABSTRACTION TK_COLON TK_ABSTRACTIONS
+%token TK_ABSTRACTION TK_ABSTRACTIONS
 %token TK_EOL TK_COUNT_REDUCTIONS TK_SIZE TK_LENGTH
 %token TK_LPAREN TK_RPAREN TK_LBRACK TK_RBRACK TK_COMMA
-%token TK_ABSTR_ANY TK_ABSTR_ANY_WO TK_ABSTR_ANY_WITH
+%token TK_ABSTR_ANY TK_ABSTR_ANY_WO TK_ABSTR_ANY_WITH TK_ABSTR_COMBINATOR
 %token <identifier> TK_IDENTIFIER TK_ABSTR_IDENT
 %token <string_constant> FILE_NAME
 %token <node> TK_REDUCE TK_TIMEOUT
@@ -503,6 +502,7 @@ a_abstr_any
 	: TK_ABSTR_ANY               { $$ = new_abs_node(Atom_string("*")); }
 	| TK_ABSTR_ANY_WITH          { $$ = new_abs_node(Atom_string("*+")); }
 	| TK_ABSTR_ANY_WO            { $$ = new_abs_node(Atom_string("*-")); }
+	| TK_ABSTR_COMBINATOR        { $$ = new_abs_node(Atom_string("*!")); }
 	;
 
 r_expr
@@ -550,7 +550,7 @@ main(int ac, char **av)
 
 	
 
-	while (-1 != (c = getopt(ac, av, "cDdeL:mN:psT:tx")))
+	while (-1 != (c = getopt(ac, av, "cDdeL:N:psT:tx")))
 	{
 		switch (c)
 		{
@@ -576,9 +576,6 @@ main(int ac, char **av)
 			if (!load_files)
 				load_files = p;
 			break;
-		case 'm':
-			memory_info = 1;
-			break;
 		case 'N':
 			max_reduction_count = strtol(optarg, NULL, 10);
 			if (max_reduction_count < 0) max_reduction_count = 0;
@@ -602,7 +599,7 @@ main(int ac, char **av)
 		}
 	}
 
-	init_node_allocation(memory_info);
+	init_node_allocation();
 
 	if (load_files)
 	{
@@ -648,10 +645,9 @@ main(int ac, char **av)
 	} while (r);
 	if (prompting) printf("\n");
 
-	if (memory_info) fprintf(stderr, "Memory usage indicators:\n");
-	free_all_nodes(memory_info);
+	free_all_nodes();
 	free_hashtable(h);
-	free_all_spine_stacks(memory_info);
+	free_all_spine_stacks();
 	free_rules();
 	delete_abstraction_rules();
 	if (cycle_detection) free_detection();
@@ -780,6 +776,7 @@ execute_bracket_abstraction(
 		r = perform_bracket_abstraction(abstracted_var, root);
 		alarm(0);
 		gettimeofday(&after, NULL);
+		if (!r) printf("Bracket abstraction on \"%s\" failed.\n", abstracted_var);
 	} else {
 		const char *phrase = "Unset";
 		alarm(0);

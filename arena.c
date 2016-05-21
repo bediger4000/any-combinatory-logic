@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,12 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: arena.c,v 1.2 2010/04/02 03:43:39 bediger Exp $ */
+/* $Id: arena.c,v 1.6 2011/06/12 18:22:00 bediger Exp $ */
 
 #include <stdio.h>
 #include <unistd.h>  /* getpagesize() */
 #include <stdlib.h>  /* malloc(), free() */
-#include <assert.h>  /* malloc(), free() */
 
 #include <arena.h>
 
@@ -50,7 +49,6 @@ struct memory_arena {
 	int sz;                     /* max free size */
 	int remaining;              /* how many bytes remain in allocation */
 	struct memory_arena *next;
-	int usage_info;
 	int sn;                     /* serial number: malloc order */
 };
 
@@ -65,16 +63,15 @@ static int combosize = 0;
  * the malloc() of one or more pages, and a 2nd element in the stack.
  */
 struct memory_arena *
-new_arena(int memory_info_flag)
+new_arena(void)
 {
 	struct memory_arena *ra = NULL;
 
-	if (!pagesize)
-	{
-		combosize = sizeof(union combo);
-		pagesize = getpagesize();
-		headersize = roundup(sizeof(struct memory_arena), combosize);
-	}
+	/* This is not so costly that it can't happen
+	 * on every call to new_arena(). */
+	combosize = sizeof(union combo);
+	pagesize = getpagesize();
+	headersize = roundup(sizeof(struct memory_arena), combosize);
 
 	ra = malloc(sizeof(*ra));
 
@@ -82,14 +79,13 @@ new_arena(int memory_info_flag)
 	ra->remaining = 0;
 	ra->first_allocation = ra->next_allocation = NULL;
 	ra->next = NULL;
-	ra->usage_info = memory_info_flag;
 	ra->sn = 0;
 
 	return ra;
 }
 
 void
-deallocate_arena(struct memory_arena *ma, int memory_info_flag)
+deallocate_arena(struct memory_arena *ma)
 {
 	int free_arena_cnt = 0;
 	int maxsz = 0;
@@ -105,51 +101,17 @@ deallocate_arena(struct memory_arena *ma, int memory_info_flag)
 		ma = tmp;
 		++free_arena_cnt;
 	}
-
-	if (memory_info_flag)
-	{
-		fprintf(stderr, "Page size %d (0x%x)\n", pagesize, pagesize);
-		fprintf(stderr, "Header size %d (0x%x)\n", headersize, headersize);
-		fprintf(stderr, "Allocated %d arenas\n", free_arena_cnt);
-		fprintf(stderr, "Max arena size %d (0x%x)\n", maxsz, maxsz);
-	}
 }
 
 void
 free_arena_contents(struct memory_arena *ma)
 {
-	int last_sn = ma->sn;
-	int max_sn = ma->sn;
 	int arena_count = 0;
 
 	ma = ma->next; /* dummy head node */
 	while (ma)
 	{
 		++arena_count;
-
-		if (ma->sn >= last_sn + 1)
-		{
-			fprintf(stderr, "Loop in chain of allocations: S/N %d, next S/N %d\n",
-				last_sn, ma->sn);
-			fprintf(stderr, "Allocated %d arenas\n", max_sn);
-			break;
-		} else
-			last_sn = ma->sn;
-
-		if (ma->sn > max_sn)
-		{
-			fprintf(stderr, "Chain of allocations out of order: max S/N %d, S/N %d\n",
-				max_sn, ma->sn);
-			fprintf(stderr, "Allocated %d arenas\n", max_sn);
-			break;
-		}
-
-		if (arena_count > max_sn)
-		{
-			fprintf(stderr, "Found at least %d allocations on chain, should only have %d\n",
-				arena_count, max_sn);
-			break;
-		}
 
 		ma->remaining = ma->sz;
 		ma->next_allocation = ma->first_allocation;
@@ -163,8 +125,6 @@ arena_alloc(struct memory_arena *ma, size_t size)
 	void *r = NULL;
 	struct memory_arena *ca;
 	size_t nsize;
-
-	assert(NULL != ma);
 
 	/* What you actually have to allocate to get to
 	 * a block "suitably aligned" for any use. */

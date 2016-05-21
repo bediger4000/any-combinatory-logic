@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: atom.c,v 1.4 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: atom.c,v 1.5 2011/06/12 18:22:00 bediger Exp $ */
 
 /*
  * A stripped-down "atom" datatype, a la "C Interfaces and Implementation".

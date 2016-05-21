@@ -5,7 +5,7 @@ Solaris 2.8, probably original AT&T Bell Labs lex, needed this:
 */
 %{
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -24,7 +24,7 @@ Solaris 2.8, probably original AT&T Bell Labs lex, needed this:
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: lex.l,v 1.8 2010/06/10 17:54:58 bediger Exp $ */
+/* $Id: lex.l,v 1.11 2011/06/12 18:22:01 bediger Exp $ */
 
 
 #include <stdio.h>
@@ -88,11 +88,11 @@ int old_prompting = -1;
 ]		    { return TK_RBRACK; }
 \,          { return TK_COMMA; }
 "abstraction:" { return TK_ABSTRACTION; }
-\: { return TK_COLON; }
 "abstractions" { return TK_ABSTRACTIONS; }
 "\[_\]"     {  return TK_ABS_MARKR; }
-"\*+"       { return TK_ABSTR_ANY_WITH; }
-"\*-"       { return TK_ABSTR_ANY_WO; }
+"\*+"       { return TK_ABSTR_ANY_WITH; /* sub-tree contains abstracted variable */ }
+"\*-"       { return TK_ABSTR_ANY_WO;   /* sub-tree does not contain abstracted variable */}
+"\*!"       { return TK_ABSTR_COMBINATOR;   /* sub-tree does not contain ANY variable */}
 "\*"        { return TK_ABSTR_ANY; }
 "_"         { return TK_ABSTRACTED_VAR; }
 "def"       { return TK_DEF; }
@@ -114,25 +114,8 @@ int old_prompting = -1;
 "rules" { return TK_RULES; }
 "size" { return TK_SIZE; }
 "length" { return TK_LENGTH; }
-"on" {
-	const char *p = Atom_string("on");
-	if (found_binary_command)
-	{
-		yylval.string_constant = p;
-		return BINARY_MODIFIER;
-	} else if (looking_for_filename) {
-		yylval.string_constant = p;
-		return FILE_NAME;
-	} else if (found_abstraction) {
-		yylval.identifier = p;
-		return TK_ABSTR_IDENT;
-	} else {
-		yylval.identifier = p;
-		return TK_IDENTIFIER;
-	}
-}
-"off" {
-	const char *p = Atom_string("off");
+"on"|"off" {
+	const char *p = Atom_string(yytext);
 	if (found_binary_command)
 	{
 		yylval.string_constant = p;

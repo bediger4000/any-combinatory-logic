@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: graph.h,v 1.3 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: graph.h,v 1.4 2011/06/12 18:19:11 bediger Exp $ */
 
 enum graphReductionResult { UNKNOWN, NORMAL_FORM, CYCLE_DETECTED, INTERRUPT, REDUCTION_LIMIT, TIMEOUT };
 

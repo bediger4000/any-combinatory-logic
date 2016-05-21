@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: node.h,v 1.8 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: node.h,v 1.13 2011/06/12 18:19:11 bediger Exp $ */
 
 enum nodeType { APPLICATION, ATOM };
 
@@ -33,7 +33,7 @@ struct node {
 	struct node **right_addr;
 	int refcnt;
 	struct reduction_rule *rule;
-	int node_number;
+	int tree_size;
 };
 
 /* struct abs_node: similar data structure created
@@ -54,21 +54,22 @@ struct abs_node {
 
 struct node *new_application(struct node *left_child, struct node *right_child);
 struct node *new_term(const char *name);
+void preallocate_nodes(int preallocated_count);
 
-void init_node_allocation(int memory_info_flag);
+void init_node_allocation(void);
 void reset_node_allocation(void);
 void print_tree(struct node *root, int reduction_node_sn, int current_node_sn);
-void free_all_nodes(int memory_info_flag);
+void free_all_nodes(void);
 void free_node(struct node *root);
 
 struct node *arena_copy_graph(struct node *root);
 
 int var_in_tree(struct node *tree, const char *var_name);
+int any_var_in_tree(struct node *tree);
 void renumber(struct node *node, int *n);
 
 struct abs_node *new_abs_node(const char *label);
 struct abs_node *new_abs_application(struct abs_node *lft, struct abs_node *rght);
 void free_abs_node(struct abs_node *tree);
-void print_node_abs(struct abs_node *root);
 void print_abs_node(struct abs_node *n);
 

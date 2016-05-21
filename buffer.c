@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 2010, Bruce Ediger
+	Copyright (C) 2010-2011, Bruce Ediger
 
     This file is part of acl.
 
@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: buffer.c,v 1.3 2010/08/10 20:50:39 bediger Exp $ */
+/* $Id: buffer.c,v 1.6 2011/06/12 18:22:01 bediger Exp $ */
 
 /*
  * Self-resizing buffer.
@@ -43,11 +43,9 @@ new_buffer(int desired_size)
 {
 	struct buffer *r = malloc(sizeof *r);
 
+	r->size = 0;
 	r->buffer = malloc(desired_size);
-	if (r->buffer)
-		r->size = desired_size;
-	else
-		r->size = 0;
+	r->size = desired_size;
 	r->offset = 0;
 
 	return r;
@@ -76,11 +74,8 @@ resize_buffer(struct buffer *b, int increment)
 
 	reallocated_buffer = realloc(b->buffer, new_size);
 
-	if (reallocated_buffer)
-	{
-		b->buffer = reallocated_buffer;
-		b->size   = new_size;
-	}
+	b->buffer = reallocated_buffer;
+	b->size   = new_size;
 }
 
 void
@@ -89,10 +84,7 @@ buffer_append(struct buffer *b, const char *bytes, int length)
 	if (length >= (b->size - b->offset))
 		resize_buffer(b, length);
 
-	if (length < b->size - b->offset)
-	{
-		/* resize_buffer() might fail */
-		memcpy(&b->buffer[b->offset], bytes, length);
-		b->offset += length;
-	}
+	/* XXX - assumes resize_buffer() always succeeds. */
+	memcpy(&b->buffer[b->offset], bytes, length);
+	b->offset += length;
 }
