@@ -1,0 +1,36 @@
+# {B, T, M, K} basis
+# $Id: 050,v 1.1 2011/07/10 17:36:35 bediger Exp $
+rule: B 1 2 3 -> 1 (2 3)
+rule: T 1 2  -> 2 1
+rule: M 1 -> 1 1
+rule: K 1 2 -> 1
+
+# Crummy, home-made algorithm.
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> B (T M) K
+abstraction: [_] *- _ -> 1
+abstraction: [_] *^ *^ -> [_] M 1
+abstraction: [_] *- *+ -> B 1 ([_] 2)
+abstraction: [_] *+ *- -> B (T 2) ([_] 1)
+abstraction: [_] * * ->  B (T (B (T ([_]2))(B B ([_]1)))) (B M (B B T))
+
+# Check each of the abstraction rules
+[x] Z = K Z
+[x] x = B (T M) K
+[x] Z x = Z
+[x] x x = M
+[x] Z (T x) = B Z T
+[x] (T x) Z = B (T Z) T
+[x] (T x) (B x) = B (T (B (T B) (B B T))) (B M (B B T))
+# Exercize abstraction rule 4, above.
+[x,y,z] (x x) (y y) (z z) = B (B (T M)) (B (B B) (B (T M) (B B M)))
+# Leave out rule 4 ([_] *^ *^ -> [_] M 1) and you get a much, much bigger expression.
+def WO_RULE4 B (B (T (B (T (B (T (B (T M) K)) (B B (B (T M) K)))) (B M (B B T))))) (B (B B) (B (T (B (T (B (T (B (T M) K)) (B B (B (T M) K)))) (B M (B B T)))) (B B (B (T (B (T (B (T M) K)) (B B (B (T M) K)))) (B M (B B T))))))
+[x,y,z] (x x) (y y) (z z) = WO_RULE4
+#
+# Very small Fixed point combinator:
+def Y [x] B x M (B x M)
+# And it has a normal form:
+Y
+#
+load tests.in/abstractions
