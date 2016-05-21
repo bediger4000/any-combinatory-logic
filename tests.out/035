@@ -1,0 +1,20 @@
+W' A B (I I I I)
+A (I I I I) (I I I I B)
+A (I I I) (I I I B)
+A (I I) (I I B)
+A I (I I B)
+A I (I B)
+A I B
+A I B
+W' A B (K a)
+A (K a) a
+W' A B (Kp a b)
+A (Kp a b) (a b)
+W' A B (Kpp a b c)
+A (Kpp a b c) (a b c)
+W' A B (Kppp a b c d)
+A (Kppp a b c d) (a b c d)
+W' A B (Kpppp a b c d e)
+A (Kpppp a b c d e) (a b c d e)
+W' A B (Kppppp a b c d e f)
+A (Kppppp a b c d e f) (a b c d e f)

@@ -1,0 +1,32 @@
+# Scott Numerals
+
+rule: S 1 2 3 -> 1 3 (2 3)
+rule: K 1 2 -> 1
+rule: I 1  -> 1
+rule: B 1 2 3 -> 1 (2 3)
+rule: C 1 2 3 -> 1 3 2
+
+(reduce S a b c) = (a c (b c))
+(reduce K a b) = a
+(reduce I a) = a
+(reduce B a b c) = a (b c)
+(reduce C a b c) = a c b
+
+# Turner abstraction, or perhaps
+# Curry-Feys, From "Combinatory Logic", Vol I
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> I
+abstraction: [_] *- _ -> 1
+abstraction: [_] *- *+ -> B 1 ([_] 2)
+abstraction: [_] *+ *- -> C ([_] 1) 2
+abstraction: [_] * * ->  S ([_] 1) ([_] 2)
+
+
+# Run through all the abstractions
+load tests.in/abstractions
+
+# Do all the abstractions, with a term substitute in
+def b (S x y)
+load tests.in/abstractions
+
+load tests.in/scott.numerals

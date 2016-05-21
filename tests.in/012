@@ -1,0 +1,43 @@
+# From Johannes Waldmann's thesis, "The Combinator S", section 5.4, "Monsters".
+# "A monster is a term with a normal form that is very large and many reduction
+# steps away.
+# Section 5.4.1. Ax Ay S are monsters.
+rule: S 1 2 3 -> 1 3 (2 3)
+def A0 S
+def T1 (S S)
+def A1 (T1 A0)
+def A2 (T1 A1)
+def A3 (T1 A2)
+def A4 (T1 A3)
+def A5 (T1 A4)
+def A6 (T1 A5)
+
+size (reduce A0 A0 S)
+size (reduce A0 A1 S)
+size (reduce A0 A2 S)
+size (reduce A1 A0 S)
+size (reduce A1 A1 S)
+size (reduce A1 A2 S)
+size (reduce A2 A0 S)
+size (reduce A2 A1 S)
+size (reduce A2 A2 S)
+size (reduce A3 A4 S)
+size (reduce A4 A3 S)
+size (reduce A4 A5 S)
+size (reduce A5 A4 S)
+size (reduce A5 A5 S)
+#size (reduce A6 A6 S) # 3843197 - takes forever
+
+# Section 5.4.10  Terms like S A1 Tn S S S are monsters
+# T1 defined above.
+def T2 (T1 T1)
+def T3 (T1 T2)
+def T4 (T1 T3)
+def T5 (T1 T4)
+def T6 (T1 T5)
+
+size reduce (S A1 T1 S S S)
+size reduce (S A1 T2 S S S)
+size reduce (S A1 T3 S S S)
+size reduce (S A1 T4 S S S)
+# size reduce (S A1 T5 S S S)

@@ -1,0 +1,18 @@
+# Peter Hancock's AMEN combinators
+rule: A 1 2 3 4 -> 2 3 (1 3 4)
+rule: M 1 2 3 -> 2 (1 3)
+rule: E 1 2  -> 2 1
+rule: N 1 2 ->  2
+rules
+abstraction: [_] *- -> M N (E 1)
+abstraction: [_] _ -> N N
+abstraction: [_] *- _ -> 1
+abstraction: [_] *- *+ -> M ([_]2) 1
+abstraction: [_] *+ *- -> M ([_] 1) (E 2)
+abstraction: [_] * * -> M (A E ([_]1)) (E ([_] 2))
+abstractions
+A a b c d
+M a b c
+E a b
+N a b
+load tests.in/abstractions

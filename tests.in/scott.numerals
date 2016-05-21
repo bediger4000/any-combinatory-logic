@@ -1,0 +1,59 @@
+# Scott Numerals as per March 8, 2006 revision of John Tromp's 
+# paper, "Binary Lambda Calculus and Combinatory Logic".
+# "The Scott Numerals [i] can be used to define arithmetic, as
+# well as for indexing lists; M [i] select's the i'th element
+# of a sequence M."
+
+#define zero %a.%b.a
+def zero [a][b] a
+#define succ %c.%d.%e.(e c)
+define succ [c][d][e] e c
+#define case %f.%g.%h.f g h
+define case [p][q][r]p q r
+#define pred %i.(i (%j.%k.j) (%l.l))
+define pred [i] (i ([j][k]j) ([l]l))
+
+def True ([x][y] x)
+def False ([x][y] y)
+
+def nil False
+def sn0 True
+def sn1 (reduce succ sn0)
+def sn2 (reduce succ sn1)
+def sn3 (reduce succ sn2)
+def sn4 (reduce succ sn3)
+def sn5 (reduce succ sn4)
+def sn6 (reduce succ sn5)
+
+# check pairing operator
+define pair ([p][q][z] z p q)
+(pair true false) True
+(pair true false) False
+
+# define a list, check that each incrementally composed Scott numeral works
+def list (reduce (pair _zero (pair _one (pair _two (pair _three (pair _four (pair _five (pair _six nil))))))))
+
+check_incremental_scott_numerals
+list sn0
+list sn1
+list sn2
+list sn3
+list sn4
+list sn5
+list sn6
+
+def Y ([x][y] x y x)([y][x] y(x y x))
+define R ([o][n][m]( case m n (o (succ n)) ))
+define add (Y R)
+
+check_added_scott_numerals
+list (add sn0 sn0)
+list (add sn0 sn1)
+list (add sn1 sn0)
+list (add sn1 sn1)
+list (add sn2 sn1)
+list (add sn1 sn2)
+list (add sn2 sn2)
+list (add sn2 sn3)
+list (add sn3 sn3)
+list (add (add sn2 sn1) (add sn1 sn2))

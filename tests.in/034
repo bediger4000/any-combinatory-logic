@@ -1,0 +1,13 @@
+# Exercize print, printc commands
+rule: K 1 2 -> 1
+K = a
+detect on
+print a (b (c (d e (f g) h)))
+detect
+print a (b (c (d e (f g) h)))
+printc a (b (c (d e (f g) h)))
+length a (b (c (d e (f g) h)))
+size a (b (c (d e (f g) h)))
+redexes K (K (c (K e (K g) h) z) p q r)
+rules
+abstraction: [_] *- -> K 1

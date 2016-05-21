@@ -1,0 +1,66 @@
+# Check parsing of minimally parenthesized expressions
+X
+X X
+X X X
+X (X X)
+X (X X X)
+X (X (X X))
+X (X X) X
+X X (X X)
+X X X X
+X (X X (X X))
+X (X (X X) X)
+X (X X X X)
+X (X (X X X))
+X (X (X (X X)))
+X (X X) (X X)
+X (X (X X)) X
+X (X X X) X
+X X (X X X)
+X X (X (X X))
+X (X X) X X
+X X (X X) X
+X X X (X X)
+X X X X X
+X (X X (X (X X)))
+X (X X (X X X))
+X (X (X X X) X)
+X (X (X (X X)) X)
+X (X (X X) (X X))
+X (X X X X X)
+X (X (X X) X X)
+X (X X (X X) X)
+X (X X X (X X))
+X (X (X X (X X)))
+X (X (X (X X) X))
+X (X (X X X X))
+X (X (X (X X X)))
+X (X (X (X (X X))))
+X (X X) (X (X X))
+X (X X) (X X X)
+X (X (X X X)) X
+X (X (X (X X))) X
+X (X (X X)) (X X)
+X (X X X X) X
+X (X (X X) X) X
+X (X X (X X)) X
+X (X X X) (X X)
+X X (X X (X X))
+X X (X (X X) X)
+X X (X X X X)
+X X (X (X X X))
+X X (X (X (X X)))
+X (X X) X (X X)
+X (X X) (X X) X
+X (X (X X)) X X
+X (X X X) X X
+X X (X X) (X X)
+X X (X (X X)) X
+X X (X X X) X
+X X X (X X X)
+X X X (X (X X))
+X (X X) X X X
+X X (X X) X X
+X X X (X X) X
+X X X X (X X)
+X X X X X X

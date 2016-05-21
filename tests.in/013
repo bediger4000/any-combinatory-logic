@@ -1,0 +1,32 @@
+rule: C 1 2 3 -> 1 3 2
+rule: W 1 2  -> 1 2 2
+rules
+
+cycles on
+
+W C (W C) (W C) # period 2, pure - WC
+W (C C) (W (C C)) (W (C C)) # period 3, pure - WCC
+W (C (C C)) (W (C (C C))) (W (C (C C))) # period 4, pure - WCCC
+W (C (C (C C))) (W (C (C (C C)))) (W (C (C (C C)))) # period 5, pure - WCCCC
+
+W C (W  C)        (W (C C))          # period 5, pure - WCWCC
+W C (W  C)        (W (C (C C)))      # period 6, pure - WCWCCC
+W C (W (C C))     (W (C (C C)))      # period 7, pure - WCCWCCC
+W C (W C)         (W (C (C (C C))))  # period 7, pure - WCWCCCC
+W C (W (C C))     (W (C (C (C C))))  # period 8, pure - WCCWCCCC
+W C (W (C (C C))) (W (C (C (C C))))  # period 9, pure - WCCCWCCCC
+W C (W C)             (W (C (C (C (C C)))))  # period 8, pure - CWCWCCCC
+W C (W (C C))         (W (C (C (C (C C)))))  # period 9, pure - CWCCWCCCC
+W C (W (C (C C)))     (W (C (C (C (C C)))))  # period 10, pure - CWCCCWCCCC
+W C (W (C (C (C C)))) (W (C (C (C (C C)))))  # period 11, pure - CWCCCCWCCCC
+W C (W C)                 (W (C (C (C (C (C C))))))  # period 9, pure  - WCWCWCCCC
+W C (W (C C))             (W (C (C (C (C (C C))))))  # period 10, pure - WCCWCCCCCC
+W C (W (C (C C)))         (W (C (C (C (C (C C))))))  # period 11, pure - WCCCWCCCCCC
+W C (W (C (C (C C))))     (W (C (C (C (C (C C))))))  # period 12, pure - WCCCCWCCCCCC
+W C (W (C (C (C (C C))))) (W (C (C (C (C (C C))))))  # period 13, pure - WCCCCCWCCCCCC
+
+C W (C W) (C W) # period 2, pure - CW
+C (C C) W (C (C C) W) (C (C C) W) # period 4, pure - CCCW
+(C (C (C (C C)))) W ((C (C (C (C C)))) W) ((C (C (C (C C)))) W) # period 6, pure - CCCCCW
+(C (C (C (C (C (C C)))))) W ((C (C (C (C (C (C C)))))) W) ((C (C (C (C (C (C C)))))) W) # period 8, pure - CCCCCCCW
+

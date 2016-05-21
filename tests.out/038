@@ -1,0 +1,10 @@
+Can't have composed arguments in primitive definitions
+f a b c d e
+f a b c d e
+rule: x 1 2 3 -> 1 (2 3) 3
+x a b c
+a (b c) c
+rule: x 1 2 3 -> 1 (2 3) 3
+rule: f 1 2 3 -> 1 2 3
+f a b c
+a b c

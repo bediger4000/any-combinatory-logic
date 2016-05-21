@@ -1,0 +1,10 @@
+# Exercize bad primitive definitions
+rule: f 1 (2 3) -> 1 2 3
+rules
+f a b c d e
+rule: x 1 2 3 -> 1 (2 3) 3
+rules
+x a b c
+rule: f 3 2 1 -> 1 2 3
+rules
+f a b c

@@ -1,0 +1,633 @@
+rule: O 1 2 -> 2
+rule: A 1 2 3 4 -> 1 3 (2 3 4)
+rule: M 1 2 3 -> 1 (2 3)
+rule: E 1 2 -> 2 1
+O a
+O a
+O a b
+b
+O a b c
+b c
+A a
+A a
+A a b
+A a b
+A a b c
+A a b c
+A a b c d
+a c (b c d)
+A a b c d e
+a c (b c d) e
+M a
+M a
+M a b
+M a b
+M a b c
+a (b c)
+M a b c d
+a (b c) d
+E a
+E a
+E a b
+b a
+E a b c
+b a c
+# 6 abstraction rules
+abstraction: [_] *- -> M (E 1) O
+# Path count: 1, Max depth: 1
+abstraction: [_] _ -> O O
+# Path count: 1, Max depth: 1
+abstraction: [_] *- _ -> 1
+# Path count: 2, Max depth: 2
+abstraction: [_] *- *+ -> M 1 ([_] 2)
+# Path count: 2, Max depth: 2
+abstraction: [_] *+ *- -> M (E 2) ([_] 1)
+# Path count: 2, Max depth: 2
+abstraction: [_] * * -> M (E ([_] 2)) (A ([_] 1) E)
+# Path count: 2, Max depth: 1
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+M (E (M M E)) (M M (M E (M (E (O O)) (M M E)))) true false (M (E O) (M M E))
+true
+M (E (M M E)) (M M (M E (M (E (O O)) (M M E)))) true false (M (E (O O)) O)
+false
+check_incremental_scott_numerals
+check_incremental_scott_numerals
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E O) (M M E))
+_zero
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (M (E (M (E O) (M M E))) (O O))) O)
+_one
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O)
+_two
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (M (E (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O)) (O O))) O)
+_three
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O)) (O O))) O)) (O O))) O)
+_four
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O)) (O O))) O)) (O O))) O)) (O O))) O)
+_five
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O)) (O O))) O)) (O O))) O)) (O O))) O)) (O O))) O)
+_six
+check_added_scott_numerals
+check_added_scott_numerals
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E O) (M M E)) (M (E O) (M M E)))
+_zero
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E O) (M M E)) (M (E (M (E (M (E O) (M M E))) (O O))) O))
+_one
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E (M (E (M (E O) (M M E))) (O O))) O) (M (E O) (M M E)))
+_one
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E (M (E (M (E O) (M M E))) (O O))) O) (M (E (M (E (M (E O) (M M E))) (O O))) O))
+_two
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O) (M (E (M (E (M (E O) (M M E))) (O O))) O))
+_three
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E (M (E (M (E O) (M M E))) (O O))) O) (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O))
+_three
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O) (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O))
+_four
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O) (M (E (M (E (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O)) (O O))) O))
+_five
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E (M (E (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O)) (O O))) O) (M (E (M (E (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O)) (O O))) O))
+_six
+M (E (M (E (M (E (M (E (M (E (M (E (M (E (M (E (O O)) O)) (M (E _six) (O O)))) (M (E _five) (O O)))) (M (E _four) (O O)))) (M (E _three) (O O)))) (M (E _two) (O O)))) (M (E _one) (O O)))) (M (E _zero) (O O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O) (M (E (M (E (M (E O) (M M E))) (O O))) O)) (M (E (O O)) (A (M M E) E) (M (E (M (M (E (O O))) (M (E E) (M A (M (E (O O)) (M M E)))))) (A M E)) (M (M (E (M (E (O O)) (M M E)))) (M (E E) (M A (M (M M) (M (M E) (M (E (M (E O) (M M (M E (M (E (O O)) (M M E)))))) M)))))) (M (E (M (E (M (E O) (M M E))) (O O))) O) (M (E (M (E (M (E (M (E (M (E O) (M M E))) (O O))) O)) (O O))) O)))
+_six

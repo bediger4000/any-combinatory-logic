@@ -1,0 +1,65 @@
+rule: I 1 -> 1
+rule: T 1 2 -> 2 1
+rule: W 1 2 -> 1 2 2
+W T (I I I I)
+T (I I I I) (I I I I)
+I I I I (I I I I)
+I I I (I I I)
+I I (I I)
+I (I I)
+I I
+I
+I
+W I (I I)
+I (I I) (I I)
+I I (I I)
+I (I I)
+I I
+I
+I
+M (M (K I))
+M (K I) (M (K I))
+K I (K I) (M (K I))
+I (M (K I))
+M (K I)
+K I (K I)
+I
+I
+W I (W I (K I))
+I (W I (K I)) (W I (K I))
+W I (K I) (W I (K I))
+I (K I) (K I) (W I (K I))
+K I (K I) (W I (K I))
+I (W I (K I))
+W I (K I)
+I (K I) (K I)
+K I (K I)
+I
+I
+wx a b c
+a b c c
+a b c c
+wx I I (W I (K I))
+I I (W I (K I)) (W I (K I))
+I (W I (K I)) (W I (K I))
+W I (K I) (W I (K I))
+I (K I) (K I) (W I (K I))
+K I (K I) (W I (K I))
+I (W I (K I))
+W I (K I)
+I (K I) (K I)
+K I (K I)
+I
+I
+wy I (W I (K I)) a
+I (W I (K I)) (W I (K I)) a
+W I (K I) (W I (K I)) a
+I (K I) (K I) (W I (K I)) a
+K I (K I) (W I (K I)) a
+I (W I (K I)) a
+W I (K I) a
+I (K I) (K I) a
+K I (K I) a
+I a
+a
+a

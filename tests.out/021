@@ -1,0 +1,50 @@
+A a b c d
+b c (a c d)
+M a b c
+b (a c)
+E a b
+b a
+N a b
+b
+M (M (M E (M (N N))) M) (M E) true false (M E (M N))
+true
+M (M (M E (M (N N))) M) (M E) true false (M N (E (N N)))
+false
+check_incremental_scott_numerals
+check_incremental_scott_numerals
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M E (M N))
+_zero
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M N (E (M (N N) (E (M E (M N))))))
+_one
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N))))))))))
+_two
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N))))))))))))))
+_three
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N))))))))))))))))))
+_four
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N))))))))))))))))))))))
+_five
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N))))))))))))))))))))))))))
+_six
+check_added_scott_numerals
+check_added_scott_numerals
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M E (M N)) (M E (M N)))
+_zero
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M E (M N)) (M N (E (M (N N) (E (M E (M N)))))))
+_one
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M N (E (M (N N) (E (M E (M N)))))) (M E (M N)))
+_one
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M N (E (M (N N) (E (M E (M N)))))) (M N (E (M (N N) (E (M E (M N)))))))
+_two
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N)))))))))) (M N (E (M (N N) (E (M E (M N)))))))
+_three
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M N (E (M (N N) (E (M E (M N)))))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N)))))))))))
+_three
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N)))))))))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N)))))))))))
+_four
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N)))))))))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N)))))))))))))))
+_five
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N)))))))))))))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N)))))))))))))))
+_six
+M (M (N N) (E _zero)) (E (M (M (N N) (E _one)) (E (M (M (N N) (E _two)) (E (M (M (N N) (E _three)) (E (M (M (N N) (E _four)) (E (M (M (N N) (E _five)) (E (M (M (N N) (E _six)) (E (M N (E (N N)))))))))))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N)))))))))) (M N (E (M (N N) (E (M E (M N))))))) (M (A E M) (E E) (M (A E (M (M (M (M (M E (M (N N))) (A E)) M) (E (E (N N)))) M)) (E (N N))) (M (M (M (M (M (M (M (M E (M (N N))) E) (M N))) M) (E E)) E) (M (A E (M (M E (M (N N))) M)))) (M N (E (M (N N) (E (M E (M N)))))) (M N (E (M (N N) (E (M N (E (M (N N) (E (M E (M N))))))))))))
+_six

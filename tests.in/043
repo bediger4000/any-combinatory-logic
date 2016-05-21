@@ -1,0 +1,5 @@
+# Try a bracket abstraction without entering
+# any abstraction rules first.  This caused core dumps originally.
+[x] x
+[x,y] y x
+[x,y,z]  a z b c y x

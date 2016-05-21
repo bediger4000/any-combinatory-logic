@@ -1,0 +1,6 @@
+S (S S K) (K m)
+S (S S K) (K m)
+S (K (S (K a) b)) m
+S (K (S (K a) b)) m
+S (K (S a (K b))) m
+S (K (S a (K b))) m

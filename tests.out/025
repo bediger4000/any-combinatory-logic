@@ -1,0 +1,73 @@
+Equivalent
+Equivalent
+Equivalent
+Equivalent
+S (S (K S) (S (K K) (S (K S) (S (K (S I)) K)))) (K K) true false K
+true
+S (S (K S) (S (K K) (S (K S) (S (K (S I)) K)))) (K K) true false (K I)
+false
+check_incremental_scott_numerals
+check_incremental_scott_numerals
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) K
+_zero
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (K (S I (K K)))
+_one
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (K (S I (K (K (S I (K K))))))
+_two
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (K (S I (K (K (S I (K (K (S I (K K)))))))))
+_three
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (K (S I (K (K (S I (K (K (S I (K (K (S I (K K))))))))))))
+_four
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (K (S I (K (K (S I (K (K (S I (K (K (S I (K (K (S I (K K)))))))))))))))
+_five
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (K (S I (K (K (S I (K (K (S I (K (K (S I (K (K (S I (K (K (S I (K K))))))))))))))))))
+_six
+check_added_scott_numerals
+check_added_scott_numerals
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) K K)
+_zero
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) K (K (S I (K K))))
+_one
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) K)
+_one
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) (K (S I (K K))))
+_two
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K (K (S I (K K)))))) (K (S I (K K))))
+_three
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) (K (S I (K (K (S I (K K)))))))
+_three
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K (K (S I (K K)))))) (K (S I (K (K (S I (K K)))))))
+_four
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K (K (S I (K K)))))) (K (S I (K (K (S I (K (K (S I (K K))))))))))
+_five
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K (K (S I (K (K (S I (K K))))))))) (K (S I (K (K (S I (K (K (S I (K K))))))))))
+_six
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K (K (S I (K K)))))) (K (S I (K K)))) (S Lark Lark (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) (K (S I (K (K (S I (K K))))))))
+_six
+check_added_scott_numerals_2
+check_added_scott_numerals_2
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) K K)
+_zero
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) K (K (S I (K K))))
+_one
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) K)
+_one
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) (K (S I (K K))))
+_two
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K (K (S I (K K)))))) (K (S I (K K))))
+_three
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) (K (S I (K (K (S I (K K)))))))
+_three
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K (K (S I (K K)))))) (K (S I (K (K (S I (K K)))))))
+_four
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K (K (S I (K K)))))) (K (S I (K (K (S I (K (K (S I (K K))))))))))
+_five
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K (K (S I (K (K (S I (K K))))))))) (K (S I (K (K (S I (K (K (S I (K K))))))))))
+_six
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K (K (S I (K K)))))) (K (S I (K K)))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) (K (S I (K (K (S I (K K))))))))
+_six
+S (S I (K _zero)) (K (S (S I (K _one)) (K (S (S I (K _two)) (K (S (S I (K _three)) (K (S (S I (K _four)) (K (S (S I (K _five)) (K (S (S I (K _six)) (K (K I)))))))))))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) (K (S I (K K)))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) (K (S I (K K)))) (Turing Turing (S (K (S (S (K S) (S (K (S I)) K)))) (S (K (S (K K))) (S (S (K S) K) (K (S (K K) (S (K (S I)) K)))))) (K (S I (K K))) (K (S I (K K))))))
+_six
+check_added_scott_numerals_3
+check_added_scott_numerals_3
+Equivalent

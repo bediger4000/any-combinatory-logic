@@ -1,0 +1,9 @@
+Not equivalent
+Literal: [0] a (b (c (d e (f g) h)))
+non-head reduction detection on
+Literal: [0] a (b (c (d e (f g) h)))
+Canonically: .a.b.c...d e.f g h
+8 atoms
+15 nodes
+Found 2 possible reductions
+rule: K 1 2 -> 1

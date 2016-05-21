@@ -1,0 +1,10 @@
+rule: S 1 2 3 -> 1 3 (2 3)
+length a b c
+length a b c d
+length a (b c) d
+length a (b c d)
+length a (b (c d))
+length a b (c d) e
+length S a b c
+length (reduce S a b c)
+length (reduce S (K a) (K b))

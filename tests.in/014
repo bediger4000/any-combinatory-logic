@@ -1,0 +1,22 @@
+# This tests whether a duplicated term gets
+# copied, or if referencing of a common sub-expression
+# takes place.
+rule: I 1 -> 1
+rule: T 1 2 -> 2 1
+rule: W 1 2 -> 1 2 2
+rules
+trace on
+W T (I I I I)
+# Simplest case that left an expression
+# in non-normal form:
+W I (I I)
+# These expressions caused original cl to have trouble:
+rule: M 1 -> 1 1
+rule: K 1 2 -> 1
+M (M (K I))
+W I (W I (K I))
+rule: wx 1 2 3 -> 1 2 3 3
+wx a b c
+wx I I (W I (K I))
+rule: wy 1 2 3 -> 1 2 2 3
+wy I (W I (K I)) a

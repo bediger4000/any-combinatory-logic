@@ -1,0 +1,10 @@
+# Test size-of-tree function
+rule: I 1 -> 1
+size I
+size (K I)
+size (I K)
+size (S a b c)
+size (S (a b) c)
+size (S (a b c))
+size (S a (b c))
+size (reduce I I I I I I I)

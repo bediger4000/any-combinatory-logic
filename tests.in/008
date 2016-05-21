@@ -1,0 +1,7 @@
+# "Egotistical bird" or "Ogre" or "Eater"
+rule: F 1 2 -> 1 1
+rules
+F a b
+F F x
+F F a b c d e f g
+F F F F F F F F F F F F F F x

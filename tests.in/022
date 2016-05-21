@@ -1,0 +1,84 @@
+# Arithmetic, as laid out in "Lambda-Calculus and Combinators,
+# an Introduction", Hindley and Seldin, chapter 4
+
+# SKI basis
+rule: I 1 -> 1
+rule: K 1 2 -> 1
+rule: S 1 2 3 -> 1 3 (2 3)
+
+# Abstaction: Definition 2.18 in H&S
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> I
+abstraction: [_] *- _ -> 1
+abstraction: [_] * * -> S ([_]1) ([_]2)
+
+def c0 [x][y]y
+def c1 [x]x
+def D ([x][y][z] (z (K y) x))
+def succ ([u][x][y] x(u x y))
+def Q ([y][v] D (succ (v c0))(y (v c0) (v c1)))
+
+# H&S call this "Bernays' R"
+def R (reduce [x][y][u] u (Q y) (D c0 x) c1)
+
+# Example 4.13 - they call it "pi-Bernays"
+def pred R c0 K
+
+predecessor
+(reduce pred c1 f n) = n
+(reduce pred (succ c1) f n) = (f n)
+(reduce pred (succ (succ c1)) f n) = (f (f n))
+(reduce pred (pred (succ (succ c1))) f n) = (f n)
+
+# Exercize 4.16 b - add, multiply, exp in terms of R
+addition
+def add [x][y] (R x (K succ) y)
+(reduce add c1 c1 f n) = (f (f n))
+(reduce add (add c1 c1) (add c1 c1) f n) = (f (f (f (f n))))
+
+def c2 (reduce add c1 c1)
+def c3 (reduce add c1 c2)
+def c4 (reduce add c2 c2)
+
+multiplication
+def mult ([x][y] R x (K (add x)) (pred y))
+(reduce mult c2 c2 f n) = (f (f (f (f n))))
+
+exponentiation
+def exp ([x][y] R x (K (mult x)) (pred y))
+(reduce exp c2 c0 f n) = (f (f n))  # Wrong - 2^0 == 1
+(reduce exp c2 c1 f n) = (f (f n))
+(reduce exp c2 c2 f n) = (f (f (f (f n))))
+(reduce exp c4 c2 f n) = (f (f (f (f (f (f (f (f (f (f (f (f (f (f (f (f n))))))))))))))))
+
+# Exercize 4.16 c - cutoff substraction, monus, etc etc
+cutoffsubtraction
+def monus [x][y] (R x (K pred) y)
+(reduce monus c1 c1 f n) = n
+(reduce monus c1 c0 f n) = f n
+(reduce monus c4 c1 f n) = (f (f (f n)))
+(reduce monus c3 c4 f n) = n
+
+# Not part of the exercizes ...
+numericalequality
+def zerotest (D c1 c0)
+def equals ([m][n] (zerotest (add (monus m n) (monus n m))))
+(reduce equals c2 c2) = c1
+(reduce equals c1 c2) = c0
+
+# How about a bluff combinator for this version of equals?
+
+# Extra practice 4.17
+# (a) the function f(m) = m^2 +2m + 3
+function
+def phi ([m] add (add (mult m m) (add m m)) c3)
+(reduce phi c1 f n) = (f (f (f (f (f (f n))))))
+(reduce phi c2 f n) = (f (f (f (f (f (f (f (f (f (f (f n)))))))))))
+
+# (b) factorial
+factorial
+def fact ([x] mult x (R c1 mult x))
+(reduce fact c0 f n) = n # Wrong - Doesn't work for c0: reduces to c0
+(reduce fact c1 f n) = (f n)
+(reduce fact c2 f n) = (f (f n))
+(reduce fact c3 f n) = (f (f (f (f (f (f n))))))

@@ -1,0 +1,3 @@
+rule: W 1 2 -> 1 2 2
+count 50
+W W W

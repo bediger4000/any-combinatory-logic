@@ -1,0 +1,11 @@
+rule: I 1 -> 1
+I x
+I x y z
+a I
+a I b
+I I
+I I I I I I I
+# This crashed an early version:
+I (a b)
+# As did this:
+I (I (I I))

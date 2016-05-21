@@ -1,0 +1,4 @@
+rule: W 1 2 -> 1 2 2
+timer on
+timeout 2
+W W W

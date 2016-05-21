@@ -1,0 +1,24 @@
+# Check a problem that occurs only with  the 2nd of two
+# copied arguments - they wouldn't get executed, even
+# if they had enough arguments.  Not a problem with
+# any given combinator's code, however, nor a problem with
+# the abstraction algorithm or the duplicating combinator.
+# The idea here is to use M, W, or S to create a duplicated
+# (ie dual-linked) sub exression, (S a b) in this:
+# a (S a b) ((S a b) c)
+# M, W, S just create a reference to the duplicated
+# sub-expression.  The bug involved looking at the
+# left-most (S a b).  S has 2 args, cannot reduce.
+# in (S a b) c , S has 3 args, should reduce, but did not.
+
+rule: S 1 2 3 -> 1 3 (2 3)
+rule: K 1 2 -> 1
+rule: I 1  -> 1
+
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> I
+abstraction: [_] * * -> S ([_]1) ([_]2)
+
+([x] a x (x c)) (S a b)
+([x] a x (x c)) (K b)
+([x] a x (x c) (x c)) (S a b)  # 2nd and 3rd instances reduce

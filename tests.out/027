@@ -1,0 +1,38 @@
+# 6 abstraction rules
+abstraction: [_] *- -> M (E 1) O
+# Path count: 1, Max depth: 1
+abstraction: [_] _ -> O O
+# Path count: 1, Max depth: 1
+abstraction: [_] *- _ -> 1
+# Path count: 2, Max depth: 2
+abstraction: [_] *- *+ -> M 1 ([_] 2)
+# Path count: 2, Max depth: 2
+abstraction: [_] *+ *- -> M (E 2) ([_] 1)
+# Path count: 2, Max depth: 2
+abstraction: [_] * * -> M (E ([_] 2)) (A ([_] 1) E)
+# Path count: 2, Max depth: 1
+# 12 abstraction rules
+abstraction: [_] *- -> M (E 1) O
+# Path count: 1, Max depth: 1
+abstraction: [_] _ -> O O
+# Path count: 1, Max depth: 1
+abstraction: [_] *- _ -> 1
+# Path count: 2, Max depth: 2
+abstraction: [_] *- *+ -> M 1 ([_] 2)
+# Path count: 2, Max depth: 2
+abstraction: [_] *+ *- -> M (E 2) ([_] 1)
+# Path count: 2, Max depth: 2
+abstraction: [_] * * -> M (E ([_] 2)) (A ([_] 1) E)
+# Path count: 2, Max depth: 1
+abstraction: [_] *- -> M (E 1) O
+# Path count: 1, Max depth: 1
+abstraction: [_] _ -> O O
+# Path count: 1, Max depth: 1
+abstraction: [_] *- _ -> 1
+# Path count: 2, Max depth: 2
+abstraction: [_] *- *+ -> M 1 ([_] 2)
+# Path count: 2, Max depth: 2
+abstraction: [_] *+ *- -> M (E 2) ([_] 1)
+# Path count: 2, Max depth: 2
+abstraction: [_] * * -> M (E ([_] 2)) (A ([_] 1) E)
+# Path count: 2, Max depth: 1

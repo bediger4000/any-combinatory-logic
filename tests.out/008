@@ -1,0 +1,9 @@
+rule: F 1 2 -> 1 1
+F a b
+a a
+F F x
+F F
+F F a b c d e f g
+F F
+F F F F F F F F F F F F F F x
+F F

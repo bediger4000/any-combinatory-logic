@@ -1,0 +1,22 @@
+# Test a few common combinators
+rule: M 1 -> 1 1
+rule: T 1 2 -> 2 1
+rule: K 1 2 -> 1
+M x
+T x y
+T T T
+T T T T
+T T T T T
+T x y  # -> y x
+T T x y  # -> y T x, as do all the T* x y below...
+T T T x y
+T T T T x y
+T T T T T x y
+K x y
+K K K
+K K K K
+K K K K K
+K K K K K K
+K K K K K K K K K K K K K K
+K (K (K (K (K (K (K (K (K (K (K (K (K K))))))))))))  # already in normal form
+M (K K K)

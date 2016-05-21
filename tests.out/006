@@ -1,0 +1,36 @@
+M x
+x x
+T x y
+y x
+T T T
+T T
+T T T T
+T T
+T T T T T
+T T
+T x y
+y x
+T T x y
+x T y
+T T T x y
+x T y
+T T T T x y
+x T y
+T T T T T x y
+x T y
+K x y
+x
+K K K
+K
+K K K K
+K K
+K K K K K
+K
+K K K K K K
+K K
+K K K K K K K K K K K K K K
+K K
+K (K (K (K (K (K (K (K (K (K (K (K (K K))))))))))))
+K (K (K (K (K (K (K (K (K (K (K (K (K K))))))))))))
+M (K K K)
+K K

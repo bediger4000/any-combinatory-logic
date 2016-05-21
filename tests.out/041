@@ -1,0 +1,48 @@
+[_] * * -> S ([_] 1) ([_] 2) on: y (x y x)
+[_] _ * _ -> ([_] S S K _ 2) on: x y x
+[_] *- * *- -> ([_] S 1 ([_] 3) 2) on: S S K x y
+[_] *- -> K 1 on: y
+[_] *- _ -> 1 on: S (S S K) (K y) x
+[_] *- -> K 1 on: y
+[_] * * -> S ([_] 1) ([_] 2) on: S (K y) (S (S S K) (K y))
+[_] *- (*- *) -> ([_] S ([_] 1) 2 3) on: S (S S K) (K y)
+[_] *- -> K 1 on: S (S S K)
+[_] *- _ -> 1 on: S (K (S (S S K))) K y
+[_] *- (*- *) -> ([_] S ([_] 1) 2 3) on: S (K y)
+[_] *- -> K 1 on: S
+[_] *- _ -> 1 on: S (K S) K y
+S (S (K S) K) (S (K (S (S S K))) K)
+S (S (K S) K) (S (K (S (S S K))) K)
+[_] S K * -> S K on: S K x
+S K
+S K
+[_] *- -> K 1 on: x
+K x
+K x
+[_] _ -> I on: a
+I
+I
+[_] *- _ -> 1 on: M x
+M
+M
+[_] _ * _ -> ([_] S S K _ 2) on: x M x
+[_] *- * *- -> ([_] S 1 ([_] 3) 2) on: S S K x M
+[_] *- -> K 1 on: M
+[_] *- _ -> 1 on: S (S S K) (K M) x
+S (S S K) (K M)
+S (S S K) (K M)
+[_] *- (*- *) -> ([_] S ([_] 1) 2 3) on: M (N x)
+[_] *- -> K 1 on: M
+[_] *- _ -> 1 on: S (K M) N x
+S (K M) N
+S (K M) N
+[_] *- * *- -> ([_] S 1 ([_] 3) 2) on: M x N
+[_] *- -> K 1 on: N
+[_] *- _ -> 1 on: S M (K N) x
+S M (K N)
+S M (K N)
+[_] * * -> S ([_] 1) ([_] 2) on: M x (N x)
+[_] *- _ -> 1 on: N x
+[_] *- _ -> 1 on: M x
+S M N
+S M N

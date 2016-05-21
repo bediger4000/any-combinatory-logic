@@ -1,0 +1,22 @@
+# The usual {S, K, I} basis, but with eight of John Tromp's
+# 9-rule abstraction algoritm.
+# $Id: 036,v 1.3 2010/07/30 13:04:04 bediger Exp $
+rule: I 1 -> 1
+rule: K 1 2 -> 1
+rule: S 1 2 3 -> 1 3 (2 3)
+#
+abstraction: [_] S K * -> S K
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> S K K
+abstraction: [_] *- _ -> 1
+# Next three abstraction rules caused trouble:
+abstraction: [_] _ * _ -> [_] S S K _ 2
+abstraction: [_] (*- (*- *)) -> [_] (S ([_]1) 2 3)
+abstraction: [_] (*- * *-) -> ([_] S 1 ([_]3) 2)
+#
+abstraction: [_] * * -> S ([_] 1) ([_] 2)
+# These 3 abstractions caused acl to fail a built-in test,
+# structs node did not get put back on free list.
+[x] x m x
+[x] a (b (m x))
+[x] a (m x) b
