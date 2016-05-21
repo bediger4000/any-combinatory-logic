@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML Basic 1.0//EN" "file:///home/bediger/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<title>Miscellaneous Bases for CL</title>
+<!-- $Id: bases.html,v 1.4 2012/01/05 00:28:44 bediger Exp $ -->
+</head>
+<body>
+<h1>Less Well-Known Cominatorially-complete Bases for Combinatory Logic</h1>
+<h2>{S,N,C} Basis</h2>
+<p>
+I'm pretty sure that {S, N} is not a basis, less sure that {S, N, T} is
+not a basis.  I could not get <a href="">Prover9</a> to give me an
+expression acting as <strong>C</strong>, <strong>T</strong> or <strong>K</strong>.
+</p>
+<pre>
+rule: C 1 2 3 -&gt; 1 3 2
+rule: N 1 2 -&gt; 2
+rule: S 1 2 3 -&gt; 1 3 (2 3)
+abstraction: [_] *- -&gt; C N 1
+abstraction: [_] _ -&gt; N N
+abstraction: [_] *- _ -&gt; 1
+abstraction: [_] * * -&gt; S ([_] 1) ([_] 2)
+([a,b,c] a c b) first second third
+([a,b,c] a (b c)) first second third
+([a,b] a b b) first second
+</pre>
+<p><a href="snc.basis">{S, N, C} basis code.</a></p>
+<h2>{B,W,C,N} Basis</h2>
+<p>
+Even though {S, N} probably isn't a basis, {B,W,C,N} does constitute a basis,
+since <kbd><strong>C N</strong></kbd> acts like <kbd><strong>K</strong></kbd>,
+even proceeding via head reduction.
+.
+</p>
+<pre>
+rule: B 1 2 3 -&gt; 1 (2 3)
+rule: W 1 2 -&gt; 1 2 2
+rule: C 1 2 3 -&gt; 1 3 2
+rule: N 1 2 -&gt; 2
+abstraction: [_] *- -&gt; C N 1
+abstraction: [_] _ -&gt; N N
+abstraction: [_] *- _ -&gt; 1
+abstraction: [_] *- *+ -&gt; B 1 ([_]2)
+abstraction: [_] *+ *- -&gt; C ([_]1) 2
+abstraction: [_] * * -&gt; W (B (C ([_]1)) ([_]2))
+</pre>
+<p><a href="bwcn.basis">{B, W, C, N} basis code.</a></p>
+<h2>{B, C, I, F} Basis</h2>
+<p>
+Would {S, F, I} work as a basis?
+</p>
+<pre>
+rule: B 1 2 3 -&gt; 1 (2 3)
+rule: C 1 2 3 -&gt; 1 3 2
+rule: I 1 -&gt; 1
+rule: F 1 2 -&gt; 1 1
+abstraction: [_] _ -&gt; I
+abstraction: [_] *- -&gt; C (F I) 1
+abstraction: [_] *- *+ -&gt; B 1 ([_]2)
+abstraction: [_] *+ *- -&gt; C ([_]1) 2
+abstraction: [_] * * -&gt;  C (B (C F (C F)) (C C)) (B (C ([_]1)) ([_]2))
+</pre>
+<p>
+<kbd><strong>F</strong></kbd> makes up half an Ogre (or Egotistical Bird):
+<kbd>F F a b c ... x y z -&gt;<sub>*</sub> F F</kbd>
+This F is not Barry Jay's factorization F.
+</p>
+<p><a href="bcfi.basis">{B, C, I, F} basis code.</a></p>
+<h2>{B',W,K} Basis</h2>
+<p>
+From "Combinatory Logic", vol 1, Sec 5S2, page 185 in the copy I used.
+Curry &amp; Feys did not give an abstraction algorithm, just defined
+I, B, C, S in terms of B', W, K to prove combinatory completeness.
+</p>
+<pre>
+rule: B' 1 2 3 -&gt; 2 (1 3)
+rule: W 1 2 -&gt; 1 2 2
+rule: K 1 2 -&gt; 1
+abstraction: [_] *- -&gt; K 1
+abstraction: [_] _ -&gt; W K
+abstraction: [_] *- _ -&gt; 1
+abstraction: [_] *- *+ -&gt; B' ([_]2) 1
+abstraction: [_] *+ *- -&gt; B' ([_] 1) (W (B' (K 2))) 
+abstraction: [_] * * -&gt; W (B' ([_]1) (B' ([_]2)))
+</pre>
+<p><a href="bpkw.basis">{B', W, K} basis code.</a></p>
+</body>
+</html>

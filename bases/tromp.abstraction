@@ -1,0 +1,31 @@
+# The {S, K} basis, but with John Tromp's
+# 9-rule abstraction algoritm.
+# $Id: tromp.abstraction,v 1.4 2011/07/05 19:53:41 bediger Exp $
+rule: K 1 2 -> 1
+rule: S 1 2 3 -> 1 3 (2 3)
+#
+abstraction: [_] S K * -> S K
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> S K K
+abstraction: [_] *- _ -> 1
+abstraction: [_] _ * _ -> [_] S S K _ 2
+abstraction: [_] (*! (*! *)) -> [_] (S ([_]1) 2 3)
+abstraction: [_] (*! * *!) -> [_] (S 1 ([_]3) 2)
+abstraction: [_] *! *^ (*! *^) ->  [_] (S 1 3 2)
+abstraction: [_] * * -> S ([_] 1) ([_] 2)
+([x] x x x) a
+# This bracket abstraction:
+[y,x] y (x y x)
+# comes out quite differently with H&S's Rule 2.18
+# Tromp comes up with:
+# S (K (S S (S (S S K)))) K
+# Rule 2.18:  (this rule assmes {S, K, I} basis)
+# S (S (K S) K) (S (S (K S) (S (K (S I)) K)) (K I))
+# Test the abstraction:
+[y,x] y (x y x) = S (K (S S (S (S S K)))) K
+# The first rule ([x] S K M -> S K for any M) causes
+# some problems for direct, lexical comparisons of
+# even the results of applying an abstracted expression
+# to some arguments.  The first rule can give you
+# extensionally equivalent expressions, like S K and K I
+# are for weak CL reduction, that aren't lexically identical.

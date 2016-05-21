@@ -1,0 +1,26 @@
+# {B', W, K} basis
+# $Id: bpkw.basis,v 1.2 2012/01/01 18:47:38 bediger Exp $
+# From: "Combinatory Abstraction with B, B' and Friends",
+# Peter Trigg, J. Roger Hindley and Martin W. Bunder,
+# Theoretical Computer Science 135 (1994) 405-422.
+# 
+# Definitions of T, C, B, S from "Combinatory Logic", vol 1,
+# Sec 5S2, pg 185 in the copy I used.
+rule: B' 1 2 3 -> 2 (1 3)
+rule: W 1 2 -> 1 2 2
+rule: K 1 2 -> 1
+
+# Neither Trigg et al or Curry & Feys give an explicit abstraction algorithm.
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> W K
+abstraction: [_] *- _ -> 1
+abstraction: [_] *- *+ -> B' ([_]2) 1
+#abstraction: [_] *+ *- -> W (B' ([_] 1) (B' (K 2)))  # Not very good.
+abstraction: [_] *+ *- -> B' ([_] 1) (W (B' (K 2)))  # alternative
+abstraction: [_] * * -> W (B' ([_]1) (B' ([_]2)))
+# Note similarity of final rule to final rule in Grzegorzyk "G" algorithm.
+
+def T  B' K (B' B' W)
+def C (B' B' (B' T))
+def B (C B')
+def S (C (B' (B' B' (B' B')) B') W)

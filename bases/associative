@@ -1,0 +1,13 @@
+# "Juggling with Combinators", Henk Barendregt, section 5, "Algebras"
+# $Id: associative,v 1.1 2010/03/30 00:41:37 bediger Exp $
+rule: M 1 2 -> 2 (1 2)
+M a b
+M M
+M M M
+M M M M
+M M M M M
+M M M M M M
+M M M M M M M
+M M M M M M M M
+M M M M M M M M M
+M M M M M M M M M M

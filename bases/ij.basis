@@ -1,0 +1,23 @@
+# {I, J} lambda-I basis from A. Church, "A Proof of Freedom From Contraction",
+# Proceedings of National Academy of Sciences, Vol 21, 1935, pg 275
+# $Id: ij.basis,v 1.3 2010/05/22 00:27:28 bediger Exp $
+rule: I 1 -> 1
+rule: J 1 2 3 4 -> 1 2 (1 4 3)
+
+abstraction: [_] _ -> I
+abstraction: [_] *- *+ -> J (J I I) ([_]2) (J I 1)
+abstraction: [_] *+ *- -> J (J I I) 2 ([_]1)
+abstraction: [_] * * -> J (J I I) (J I I) (J I (J (J I I) (J I I) (J (J I I) ([_]2) (J (J I I) ([_]1) J))))
+
+def S ([p,q,r] p r (q r))
+S a b c
+def B ([a,b,c] a (b c))
+B a b c
+def C ([a,b,c] a c b)
+C a b c
+def W ([p,q] p q q)
+W a b
+
+cycles on
+def myT J (J I I) (J I I) (J (J I I) (J I I) (J I J))
+myT myT myT myT #  period 34 cycle

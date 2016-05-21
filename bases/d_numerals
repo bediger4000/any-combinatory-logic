@@ -1,0 +1,98 @@
+# Adequate numeral system: zero, successor, predecessor, and test for zero.
+#
+# Mayer Goldberg's "d-numerals", also mentioned in "Juggling with Combinators",
+# as something that appeared in a 1980 van der Poel paper.
+# $Id: d_numerals,v 1.2 2010/05/22 00:27:28 bediger Exp $
+
+rule: I 1 -> 1
+rule: K 1 2 -> 1
+rule: S 1 2 3 -> 1 3 (2 3)
+
+# Seldin and Hindley's Rule 2.18
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> I
+abstraction: [_] *- _ -> 1
+abstraction: [_] * * -> S ([_]1) ([_]2)
+
+def d0 [x]x
+def dn_succ [b,x] (b x x)
+def d1 (reduce dn_succ d0)
+def d2 (reduce dn_succ d1)
+def d3 (reduce dn_succ d2)
+def d4 (reduce dn_succ d3)
+
+# Test for zero: depends on this fact:
+# T x y -> y x
+# d0 T -> T
+# dn T -> T T, n > 0
+def myT [x,y] y x
+def dn_zerotest [x] x myT I S (K I) K (K I) K
+
+(reduce dn_zerotest d0 true false) = true
+(reduce dn_zerotest d1 true false) = false
+(reduce dn_zerotest d2 true false) = false
+(reduce dn_zerotest d3 true false) = false
+(reduce dn_zerotest d4 true false) = false
+
+# Goldberg hints at a way to do arbitary functions in d-numerals:
+# Convert to Church Numerals, do the function, convert answer back
+# to d-numerals.
+# Church Numerals
+def c0 [x,y]y
+# Church successor function: S B, but B set to [a,b,c] a (b c)
+def church_succ [x] (S (S (K S) K) x)
+def c1 (reduce church_succ c0)
+def c2 (reduce church_succ c1)
+def c3 (reduce church_succ c2)
+def c4 (reduce church_succ c3)
+
+# This form of predecessor reduces only part-way down to 
+# "the same church numeral" in CL.  The result is only
+# intentionally equal?
+def church_pred ([nn][ff][xx] nn ([gg][hh] hh (gg ff)) ([uu]xx) ([uu] uu))
+(reduce church_pred c1 ff nn) = (reduce c0 ff nn)
+(reduce church_pred c2 ff nn) = (reduce c1 ff nn)
+(reduce church_pred c3 ff nn) = (reduce c2 ff nn)
+(reduce church_pred c4 ff nn) = (reduce c3 ff nn)
+
+# To Church Numerals
+def m [aa,bb,cc,dd,ee] dd
+def p [aa,bb,cc] cc
+def ftest [xx] xx m
+def f [w,a,b] ftest b (w w (S (S (K S) K) a)) a
+def g [x] (x x (K I))
+def to_church1 (reduce [cn,x,y] cn (x y) p)
+def to_church (reduce [x] to_church1 x g f)
+# Check that to_church has a normal form
+to_church = reduce to_church
+
+reduce to_church d0 = c0
+reduce to_church d1 = c1
+reduce to_church d2 = c2
+reduce to_church d3 = c3
+reduce to_church d4 = c4
+
+# From Church numerals to D-numerals
+def to_dn ([cn] cn ([a,b] a (S b I)) I I)
+(reduce to_dn c0 ) = d0
+(reduce to_dn c1 ) = d1
+(reduce to_dn c2 ) = d2
+(reduce to_dn c3 ) = d3
+(reduce to_dn c4 ) = d4
+
+# Inordinately expensive predecessor
+def dn_pred ([xx] (to_dn (church_pred (to_church xx))))
+dn_pred = reduce dn_pred
+reduce dn_pred d4 = d3
+reduce dn_pred d3 = d2
+reduce dn_pred d2 = d1
+reduce dn_pred d1 = d0
+
+def add_dn_f [w,a,b] dn_zerotest b a (w w (dn_succ a) (dn_pred b))
+def add_dn (S I I add_dn_f)
+(reduce add_dn d2 d2) = d4
+(reduce add_dn d0 d4) = d4
+(reduce add_dn d0 d0) = d0
+(reduce add_dn d2 d1) = d3
+(reduce add_dn d3 d0) = d3
+(reduce add_dn d1 d2) = d3

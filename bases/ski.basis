@@ -1,0 +1,15 @@
+# The usual {S, K, I} basis.
+# $Id: ski.basis,v 1.3 2010/06/10 17:55:44 bediger Exp $
+rule: I 1 -> 1
+rule: K 1 2 -> 1
+rule: S 1 2 3 -> 1 3 (2 3)
+# Hindley & Seldin's Def 2.14
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> I
+abstraction: [_] *- _ -> 1
+abstraction: [_] * * -> S ([_] 1) ([_] 2)
+S (S K K) (S K K) x
+([x] x x x) a
+[x] x
+[x,y] x
+[p,q,r] p r (q r)

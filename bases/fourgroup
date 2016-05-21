@@ -1,0 +1,170 @@
+# Klein Fourgroup, with CL application as the operation.
+# Some of this is from Henk Barendregdt's 1988 "Juggling With
+# Combinators": http://repository.ubn.ru.nl/handle/2066/17290
+#
+# The idea is to embed a fourgroup into CL expressions. When
+# you apply the CL expressions, you end up performing the
+# operation of the fourgroup on members of the fourgroup.
+# The Fourgroup here is {1,3,5,7}, operation multiplication modulo 8,
+# but I'm going to do it by table lookup instead of using an
+# operation (modulo) that doesn't have an (easy) normal form
+
+# Scott Numerals as per March 8, 2006 revision of John Tromp's 
+# paper, "Binary Lambda Calculus and Combinatory Logic".
+# "The Scott Numerals [i] can be used to define arithmetic, as
+# well as for indexing lists; M [i] select's the i'th element
+# of a sequence M."
+# $Id: fourgroup,v 1.2 2010/05/22 00:27:28 bediger Exp $
+
+# Basis: SKI
+rule: I 1 -> 1
+rule: K 1 2 -> 1
+rule: S 1 2 3 -> 1 3 (2 3)
+
+# Hindley & Seldin's Def 2.14
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> I
+abstraction: [_] *- _ -> 1
+abstraction: [_] * * -> S ([_]1) ([_]2)
+
+#define zero %a.%b.a
+def zero [a][b] a
+#define succ %c.%d.%e.(e c)
+define succ [c][d][e] e c
+#define case %f.%g.%h.f g h
+define case [p][q][r]p q r
+#define pred %i.(i (%j.%k.j) (%l.l))
+define pred [i] (i ([j][k]j) ([l]l))
+
+def True ([x][y] x)
+def False ([x][y] y)
+
+def nil False
+def sn0 True
+def sn1 (reduce succ sn0)
+def sn2 (reduce succ sn1)
+def sn3 (reduce succ sn2)
+def sn4 (reduce succ sn3)
+
+# Original "Cayley table" of a fourgroup:
+# *  1 3 5 7
+#  \ _______
+# 1 |1 3 5 7
+# 3 |3 1 7 5
+# 5 |5 7 1 3
+# 7 |7 5 3 1
+#
+# Since this example has a table-driven function, with
+# Scott numerals as arguments, and selectors of elements
+# of lists, why not use 0,1,2,3 for 1,3,5,7?
+# *  0 1 2 3
+#  \ _______
+# 0 |0 1 2 3
+# 1 |1 0 3 2
+# 2 |2 3 0 1
+# 3 |3 2 1 0
+#
+# More abstractly:
+# *  a b c d
+#  \ _______
+# a |a b c d
+# b |b a d c
+# c |c d a b
+# d |d c b a
+#
+# You could certainly do a fourgroup with an operation
+# like:
+# greater-than
+# def g2 [w] [a] [b] zerotest a f (zerotest b t (w w (pred a) (pred b)))
+# def g g2 g2
+# modulo 8
+# def A1 [w][x] g x b7 (w w (monus x b8)) x
+# def modulo8 (A1 A1)
+# Mulitplication modulo 8
+# def F [a][b] modulo8 (mult a b) 
+#
+# And then you'd have a fourgroup of {sn1, sn3, sn5, sn7}, with F
+# (not mere application) as the group operation.  Also, modulo
+# as defined above doesn't have a normal form, so the Ma, Mb,...
+# combinators wouldn't have a normal form, and the "=" comparisons
+# wouldn't be nearly so neat.
+
+
+# Make lists representing the horizontal rows, then
+# make a list of those lists. 
+
+# pair combinator, Smullyan's "Vireo" bird.
+
+define pair ([p][q][z] z p q)
+
+define L0 (reduce pair sn0 (pair sn1 (pair sn2 (pair sn3 nil))))
+define L1 (reduce pair sn1 (pair sn0 (pair sn3 (pair sn2 nil))))
+define L2 (reduce pair sn2 (pair sn3 (pair sn0 (pair sn1 nil))))
+define L3 (reduce pair sn3 (pair sn2 (pair sn1 (pair sn0 nil))))
+
+define matrix (reduce pair L0 (pair L1 (pair L2 (pair L3 nil))))
+
+# F, a combinator, represents the function f(x,y). 
+# In this case, a table lookup using the list selector property of
+# Scott Numerals.
+define F [x][y] matrix y x
+
+# note that G has the "pair" functionality built in.
+define G [p][q][r][z] z p (F r q)
+
+# The elements of the fourgroup
+def Ma (reduce pair G sn0)
+def Mb (reduce pair G sn1)
+def Mc (reduce pair G sn2)
+def Md (reduce pair G sn3)
+
+# So Ma = <G, a>, where angle-brackets denote a pair
+# G = [p][q][r] <p, F r q>
+#
+# Ma Ma  = <G, a> <G, a>
+#       -> <G, a> G a  Note switch to reduction from equality.
+#       -> G G a a     2nd G gets used for [z] pair <G, a>
+#       -> <G, F a a>  2nd G becomes [p] in 1st G, a as [p] and [r]
+#       -> <G, a>      When F selects list a, then element a of list a
+
+# Prove combinators have normal form
+Ma = reduce Ma
+Mb = reduce Mb
+Mc = reduce Mc
+Md = reduce Md
+
+# Prove combinators distinct
+Ma = Mb
+Ma = Mc
+Ma = Md
+Mb = Mc
+Mb = Md
+Mc = Md
+
+# Prove identity property
+reduce Ma Ma = Ma
+reduce Mb Mb = Ma
+reduce Mc Mc = Ma
+reduce Md Md = Ma
+
+# Prove associative property
+reduce Ma Mb = reduce Mb Ma
+reduce Ma Mc = reduce Mc Ma
+reduce Ma Md = reduce Md Ma
+reduce Mb Mc = reduce Mc Mb
+reduce Mb Md = reduce Md Mb
+reduce Mc Md = reduce Md Mc
+
+# Prove the distinctness of products
+reduce Ma Mb = Mb
+reduce Ma Mc = Mc
+reduce Ma Md = Md
+reduce Mb Ma = Mb
+reduce Mb Mc = Md
+reduce Mb Md = Mc
+reduce Mc Ma = Mc
+reduce Mc Mb = Md
+reduce Mc Md = Mb
+reduce Md Ma = Md
+reduce Md Mb = Mc
+reduce Md Mc = Mb

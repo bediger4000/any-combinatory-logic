@@ -1,0 +1,60 @@
+# {I, B, C, S} basis for lambda-I calculus
+# $Id: ibcs.basis,v 1.3 2010/05/22 00:27:28 bediger Exp $
+rule: B 1 2 3 -> 1 (2 3)
+rule: C 1 2 3 -> 1 3 2
+rule: I 1 -> 1
+rule: S 1 2 3 -> 1 3 (2 3)
+
+# No rule [x] M -> K M, as no K combinator exists in this basis.
+abstraction: [_] _ -> I
+abstraction: [_] *- *+ -> B 1 ([_] 2)
+abstraction: [_] *+ *- -> C ([_] 1) 2
+abstraction: [_] * * ->  S ([_] 1) ([_] 2)
+
+def U ([x,y] y (x x y))
+
+# Arithmetic operators from:
+# "A Theory of Positive Integers in Formal Logic, Part 1"
+# S.C. Kleene, American Journal of Mathematics, vol 57, no 1, Jan. 1935
+define c1 ([f,n] f n)
+
+define succ ([r,f,x] (f (r f x)))
+def c2 (reduce succ c1)
+def c3 (reduce succ c2)
+reduce c2 f n = f (f n)
+reduce c3 f n = f (f (f n))
+define plus ([r,s,f,x] (r f (s f x)))
+define mult ([r,s,x] (r (s x)))  # B by any other name
+define exp [m,n] n m
+
+# Number dyads and triads
+def D ([r,s,f,g,a] (r f (s g a)))
+def D1 ([r,f] r f I)
+def D2 ([r] r I)
+
+reduce (D2 (D (succ c1) c1) f n) = f n
+reduce (D1 (D (succ (succ c1)) c1) f n) = f (f (f n))
+
+def T ([r,s,t,f,g,h,a] (r f (s g (t h a))))
+def T1 ([r,f] (r f I I))
+def T2 ([r,f] (r I f I))
+def T3 ([r] (r I I))
+
+(reduce (T1 (T c1 c2 c3) f n)) = f n
+(reduce (T2 (T c1 c2 c3) f n)) = f (f n)
+(reduce (T3 (T c1 c2 c3) f n)) = f (f (f n))
+
+# predecessor in lambda-I!
+def F ([r] (T (T2 r) (T3 r) (succ (T3 r))))
+def ff (T c1 c1 c1)
+def pred ([r] (T1 (r F ff)))
+
+(reduce pred c3 f n) = f (f n)
+(reduce pred c2 f n) = f n
+(reduce pred c1 f n) = f n
+
+# Subtraction
+def sub ([u,v] (v pred u))
+(reduce sub c3 c2 f n) = (reduce c1 f n)
+(reduce sub (succ c3) c2 f n) = (reduce c2 f n)
+(reduce sub c1 c1 f n)  = (reduce c1 f n)
