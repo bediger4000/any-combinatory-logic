@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: arena.c,v 1.6 2011/06/12 18:22:00 bediger Exp $ */
+/* $Id: arena.c,v 1.7 2011/07/10 20:10:59 bediger Exp $ */
 
 #include <stdio.h>
 #include <unistd.h>  /* getpagesize() */
@@ -49,7 +49,6 @@ struct memory_arena {
 	int sz;                     /* max free size */
 	int remaining;              /* how many bytes remain in allocation */
 	struct memory_arena *next;
-	int sn;                     /* serial number: malloc order */
 };
 
 static int pagesize = 0;
@@ -70,7 +69,7 @@ new_arena(void)
 	/* This is not so costly that it can't happen
 	 * on every call to new_arena(). */
 	combosize = sizeof(union combo);
-	pagesize = getpagesize();
+	pagesize = 8 * getpagesize();
 	headersize = roundup(sizeof(struct memory_arena), combosize);
 
 	ra = malloc(sizeof(*ra));
@@ -79,7 +78,6 @@ new_arena(void)
 	ra->remaining = 0;
 	ra->first_allocation = ra->next_allocation = NULL;
 	ra->next = NULL;
-	ra->sn = 0;
 
 	return ra;
 }
@@ -87,32 +85,21 @@ new_arena(void)
 void
 deallocate_arena(struct memory_arena *ma)
 {
-	int free_arena_cnt = 0;
-	int maxsz = 0;
 	while (ma)
 	{
 		struct memory_arena *tmp = ma->next;
-
-		if (ma->sz > maxsz) maxsz = ma->sz;
-
 		ma->next = NULL;
 		free(ma);
-
 		ma = tmp;
-		++free_arena_cnt;
 	}
 }
 
 void
 free_arena_contents(struct memory_arena *ma)
 {
-	int arena_count = 0;
-
 	ma = ma->next; /* dummy head node */
 	while (ma)
 	{
-		++arena_count;
-
 		ma->remaining = ma->sz;
 		ma->next_allocation = ma->first_allocation;
 		ma = ma->next;
@@ -123,19 +110,19 @@ void *
 arena_alloc(struct memory_arena *ma, size_t size)
 {
 	void *r = NULL;
-	struct memory_arena *ca;
+	struct memory_arena *tmp;
 	size_t nsize;
 
 	/* What you actually have to allocate to get to
 	 * a block "suitably aligned" for any use. */
 	nsize = roundup(size, combosize);
 
-	ca = ma->next;
+	tmp = ma->next;
 
-	while (ca && nsize > ca->remaining)
-		ca = ca->next;
+	while (tmp && nsize > tmp->remaining)
+		tmp = tmp->next;
 
-	if (NULL == ca)
+	if (NULL == tmp)
 	{
 
 		/* You could do something like moving all arenas with
@@ -146,29 +133,22 @@ arena_alloc(struct memory_arena *ma, size_t size)
 		/* create a new struct memory_arena of at least 1 page */
 		size_t arena_size = roundup((nsize + headersize), pagesize);
 
-		ca = malloc(arena_size);
+		pagesize *= 2;  /* make next allocation twice as large */
 
-		ca->first_allocation = ((char *)ca) + headersize;
-		ca->next_allocation = ca->first_allocation;
-		ca->sz = arena_size - headersize;
-		ca->remaining = ca->sz;
+		tmp = malloc(arena_size);
 
-		/* Each struct arena gets a unique serial number,
-		 * and the dummy "head" node sn field has a count of
-		 * how many structs arena reside in the list.
-		 */
-		ca->sn = ++ma->sn;
+		tmp->first_allocation = ((char *)tmp) + headersize;
+		tmp->next_allocation = tmp->first_allocation;
+		tmp->sz = arena_size - headersize;
+		tmp->remaining = tmp->sz;
 
-		/* since the next 2 lines make a FIFO stack of structs
-		 * arena, the serial numbers must decrease by one 
-		 * as you walk the stack. */
-		ca->next = ma->next;
-		ma->next = ca;
+		tmp->next = ma->next;
+		ma->next = tmp;
 	}
 
-	r = ca->next_allocation;
-	ca->next_allocation += nsize; /* next_allocation stays aligned */
-	ca->remaining -= nsize;
+	r = tmp->next_allocation;
+	tmp->next_allocation += nsize; /* next_allocation stays aligned */
+	tmp->remaining -= nsize;
 
 	return r;
 }

@@ -20,7 +20,7 @@
 
 */
 
-/* $Id: grammar.y,v 1.20 2011/06/12 18:22:01 bediger Exp $ */
+/* $Id: grammar.y,v 1.24 2011/07/09 17:12:50 bediger Exp $ */
 
 
 #include <stdio.h>
@@ -45,6 +45,7 @@ extern char *optarg;
 #include <parser.h>
 #include <reduction_rule.h>
 #include <brack.h>
+#include <aho_corasick.h>
 
 #ifdef YYBISON
 #define YYERROR_VERBOSE
@@ -69,7 +70,7 @@ int reduction_timeout = 0;   /* how long to let a graph reduction run, seconds *
 int max_reduction_count = 0; /* when non-zero, how many reductions to perform */
 
 #define DEFAULT_PROMPT "ACL> "
-char *current_prompt = DEFAULT_PROMPT;
+const char *current_prompt = DEFAULT_PROMPT;
 int prompting = 1;
 
 /* Signal handling.  in_reduce_graph used to (a) handle
@@ -146,7 +147,7 @@ extern int yyparse(void);
 %token TK_ABSTRACTION TK_ABSTRACTIONS
 %token TK_EOL TK_COUNT_REDUCTIONS TK_SIZE TK_LENGTH
 %token TK_LPAREN TK_RPAREN TK_LBRACK TK_RBRACK TK_COMMA
-%token TK_ABSTR_ANY TK_ABSTR_ANY_WO TK_ABSTR_ANY_WITH TK_ABSTR_COMBINATOR
+%token TK_ABSTR_ANY TK_ABSTR_ANY_WO TK_ABSTR_ANY_WITH TK_ABSTR_COMBINATOR TK_ABSTR_MATCH
 %token <identifier> TK_IDENTIFIER TK_ABSTR_IDENT
 %token <string_constant> FILE_NAME
 %token <node> TK_REDUCE TK_TIMEOUT
@@ -503,6 +504,7 @@ a_abstr_any
 	| TK_ABSTR_ANY_WITH          { $$ = new_abs_node(Atom_string("*+")); }
 	| TK_ABSTR_ANY_WO            { $$ = new_abs_node(Atom_string("*-")); }
 	| TK_ABSTR_COMBINATOR        { $$ = new_abs_node(Atom_string("*!")); }
+	| TK_ABSTR_MATCH             { $$ = new_abs_node(Atom_string("*^")); }
 	;
 
 r_expr
@@ -540,7 +542,6 @@ r_term
 int
 main(int ac, char **av)
 {
-	extern int yydebug;
 	int c, r;
 	struct filename_node *p, *load_files = NULL, *load_tail = NULL;
 	struct hashtable *h = init_hashtable(64, 10);
@@ -650,6 +651,7 @@ main(int ac, char **av)
 	free_all_spine_stacks();
 	free_rules();
 	delete_abstraction_rules();
+	cleanup_abstraction();
 	if (cycle_detection) free_detection();
 	reset_yyin();
 
@@ -771,7 +773,9 @@ execute_bracket_abstraction(
 
 	if (!(cc = sigsetjmp(in_reduce_graph, 1)))
 	{
-		alarm(reduction_timeout);
+		/* No timeout on bracket abstractions: they don't take that
+		 * long, and since I wrote recursive abstraction, a timeout
+		 * risks leaking lots of small memory allocations. */
 		gettimeofday(&before, NULL);
 		r = perform_bracket_abstraction(abstracted_var, root);
 		alarm(0);

@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: aho_corasick.c,v 1.8 2011/06/12 18:22:00 bediger Exp $ */
+/* $Id: aho_corasick.c,v 1.12 2011/07/09 14:22:59 bediger Exp $ */
 
 /*
  *  This code based on:
@@ -50,6 +50,8 @@
 #include <cb.h>
 #include <hashtable.h>
 #include <atom.h>
+#include <buffer.h>
+#include <graph.h>
 
 /* From "Pattern Matching in Trees". */
 struct stack_elem {
@@ -59,8 +61,8 @@ struct stack_elem {
 	int node_number;
 };
 
-void set_output_length(struct gto *p, int state, int node_count);
-int tabulate(struct gto *g, struct stack_elem *stack, int top, int state, int pat_leaf_count, int *count);
+void set_output_length(struct gto *p, int state, int node_cnt);
+int tabulate(struct gto *g, struct stack_elem *stk, int top, int state, int pat_leaf_count, int *count);
 
 const char *abstr_meta_var;
 
@@ -149,7 +151,7 @@ set_output(struct gto *p, int state, const char *keyword)
 {
 	size_t kwl = strlen(keyword);
 	int i;
-	int node_count = 0;
+	int output_node_count = 0;
 
 	/* Slightly weird: count the number of nodes in
 	 * the "keyword", which is actually a string, from
@@ -161,7 +163,7 @@ set_output(struct gto *p, int state, const char *keyword)
 		 * or right branch at an application node. */
 		if ('1' != keyword[i] && '2' != keyword[i])
 		{
-			++node_count;
+			++output_node_count;
 
 			/* If you hit a keyword that doesn't begin
 			 * with '@', you've hit a leaf node.  We've
@@ -171,15 +173,15 @@ set_output(struct gto *p, int state, const char *keyword)
 		}
 	}
 
-	set_output_length(p, state, node_count);
+	set_output_length(p, state, output_node_count);
 }
 
 void
-set_output_length(struct gto *p, int state, int node_count)
+set_output_length(struct gto *p, int state, int node_cnt)
 {
 	struct output_extent *oxt;
 
-	/* value of node_count stored against the match */
+	/* value of node_cnt stored against the match */
 
 	if (state >= p->output_len)
 	{
@@ -212,12 +214,12 @@ set_output_length(struct gto *p, int state, int node_count)
 			oxt->out = malloc(oxt->max * sizeof(int));
 	}
 
-	oxt->out[oxt->len++] = node_count;
+	oxt->out[oxt->len++] = node_cnt;
 
 	/* state has oxt->len matches now */
 
-	if (node_count > p->max_node_count)
-		p->max_node_count = node_count;
+	if (node_cnt > p->max_node_count)
+		p->max_node_count = node_cnt;
 }
 
 
@@ -389,6 +391,11 @@ construct_delta(struct gto *g)
  * RHS of the abstraction rule at that node.
  */
 
+static int *count = NULL;
+static struct stack_elem *stack = NULL;
+static unsigned int stack_sz = 0;
+
+
 int
 algorithm_d(struct gto *g, struct node *t, int subject_node_count, int pat_path_cnt, const char *abstr_var_name)
 {
@@ -396,17 +403,24 @@ algorithm_d(struct gto *g, struct node *t, int subject_node_count, int pat_path_
 	int matched = 0;
 	int breadth_counter = 0;
 	int next_state;
-	int i;
-	int *count;
-	struct stack_elem *stack;
 	const char *p;
+	struct node *exact_match_node = NULL;
 
+	++subject_node_count; /* 0-indexed arrays, first element at index 1 */
 
-	count = malloc(subject_node_count * sizeof(int));
-	stack = malloc((subject_node_count + 1) * sizeof(struct stack_elem));
+	if (subject_node_count > stack_sz)
+	{
+		if (subject_node_count < 100)
+			stack_sz = 100;
+		else
+			stack_sz = subject_node_count;
+		if (count) free(count);
+		count = malloc(stack_sz * sizeof(int));
+		if (stack) free(stack);
+		stack = malloc(stack_sz * sizeof(struct stack_elem));
+	}
 
-	for (i = 0; i < subject_node_count; ++i)
-		count[i] = 0;
+	memset(count, 0, stack_sz * sizeof(int));
 
 	next_state = 0;
 	p = (t->name != abstr_var_name)? t->name: abstr_meta_var;
@@ -472,25 +486,45 @@ algorithm_d(struct gto *g, struct node *t, int subject_node_count, int pat_path_
 			{
 				matched += tabulate(g, stack, top, nxt_st, pat_path_cnt, count);
 
-				if (any_var_in_tree(next_node))
+				if (!matched)
 				{
-					if (var_in_tree(next_node, abstr_var_name))
-						nxt_st = g->delta[intstate][(int)'+'];
-					else
-						nxt_st = g->delta[intstate][(int)'-'];
-				} else {
-					nxt_st = g->delta[intstate][(int)'!'];
-					if (0 == nxt_st)
-						nxt_st = g->delta[intstate][(int)'-'];
+					nxt_st = g->delta[intstate][(int)'^'];
+					if (nxt_st)
+					{
+						if (exact_match_node)
+						{
+							if (equivalent_graphs(exact_match_node, next_node))
+								matched += tabulate(g, stack, top, nxt_st, pat_path_cnt, count);
+						} else {
+							/* XXX - what about a 3-way match?
+							 * should increment count[something] here, as we found it. */
+							exact_match_node = next_node;
+							matched += tabulate(g, stack, top, nxt_st, pat_path_cnt, count);
+						}
+					}
 				}
 
-				matched += tabulate(g, stack, top, nxt_st, pat_path_cnt, count);
+				if (!matched)
+				{
+					if (any_var_in_tree(next_node))
+					{
+						if (var_in_tree(next_node, abstr_var_name))
+							nxt_st = g->delta[intstate][(int)'+'];
+						else
+							nxt_st = g->delta[intstate][(int)'-'];
+					} else {
+						nxt_st = g->delta[intstate][(int)'!'];
+						if (0 == nxt_st)
+							nxt_st = g->delta[intstate][(int)'-'];
+					}
+
+					matched += tabulate(g, stack, top, nxt_st, pat_path_cnt, count);
+				}
 			}
 		}
 	}
 
-	free(stack);
-	free(count);
+	exact_match_node = NULL;
 
 	return matched;
 }
@@ -501,7 +535,7 @@ algorithm_d(struct gto *g, struct node *t, int subject_node_count, int pat_path_
  * match the pattern.
  */
 int
-tabulate(struct gto *g, struct stack_elem *stack, int top, int state, int pat_leaf_count, int *count)
+tabulate(struct gto *g, struct stack_elem *stk, int top, int state, int pat_leaf_count, int *cnt)
 {
 	int i;
 	int r = 0;
@@ -515,12 +549,28 @@ tabulate(struct gto *g, struct stack_elem *stack, int top, int state, int pat_le
 	for (i = 0; r == 0 && i < oxt->len; ++i)
 	{
 		int idx = top - oxt->out[i] + 1;
+		int nn = stk[idx].node_number;
 
-		++count[stack[idx].node_number];
+		++cnt[nn];
 
-		if (count[stack[idx].node_number] == pat_leaf_count)
+		if (cnt[nn] == pat_leaf_count)
 			r = 1;
 	}
 
 	return r;
+}
+
+void
+cleanup_abstraction(void)
+{
+	if ((stack || count) && stack_sz == 0)
+		fprintf(stderr, "Problem: bracket abstraction stack (%p) or count (%p) non-NULL but stack size wrong (%d)\n",
+			stack, count, stack_sz);
+	if ((stack == NULL || count == NULL) && stack_sz != 0)
+		fprintf(stderr, "Problem: bracket abstraction stack (%p) or count (%p) NULL but stack size non-zero (%d)\n",
+			stack, count, stack_sz);
+	if (stack) free(stack);
+	stack = NULL;
+	if (count) free(count);
+	count = NULL;
 }

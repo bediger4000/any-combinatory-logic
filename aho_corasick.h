@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: aho_corasick.h,v 1.3 2011/06/12 18:19:11 bediger Exp $ */
+/* $Id: aho_corasick.h,v 1.4 2011/07/09 14:22:59 bediger Exp $ */
 
 struct output_extent {
 	int   *out;   /* array of int, lengths of matched paths */
@@ -47,3 +47,4 @@ struct gto *init_goto(void);
 void        destroy_goto(struct gto *);
 
 int algorithm_d(struct gto *g, struct node *subject, int subject_node_count, int pat_path_cnt, const char *abstr_var_name);
+void cleanup_abstraction(void);

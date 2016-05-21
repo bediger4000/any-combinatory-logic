@@ -18,7 +18,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: brack.c,v 1.10 2011/06/12 18:22:00 bediger Exp $ */
+/* $Id: brack.c,v 1.13 2011/07/10 23:38:20 bediger Exp $ */
 
 /*
  * Generalized bracket abstraction.  Externally-visible unctions to:
@@ -110,6 +110,10 @@ print_rule(struct abstraction_rule *abs_rule, struct node *tree)
 	printf("\n");
 }
 
+
+/* perform_bracket_abstraction() recurses through 
+ * perform_replacement(), so it has to be re-entrant.
+ */
 struct node *
 perform_bracket_abstraction(const char *var, struct node *expr)
 {
@@ -126,17 +130,32 @@ perform_bracket_abstraction(const char *var, struct node *expr)
 
 		if (matched)
 		{
-			struct node **replacements
-				= malloc(rules[idx]->replaceable_leaves_cnt * (sizeof (struct node *)));
+			struct node **repl_ary = malloc(
+				rules[idx]->replaceable_leaves_cnt
+				* (sizeof (struct node *))
+			);
+#ifdef DESPARATE
+			/* This works, and eliminates a call to free() later,
+			 * and could mitigate leaking the memory on keyboard interrupt.
+			 */
+			struct node **repl_ary = alloca(
+				rules[idx]->replaceable_leaves_cnt
+				* (sizeof (struct node *))
+			);
+			/* But so would this: struct node *repl_ary[20]; */
+#endif
 
 			if (trace_reduction) print_rule(rules[idx], expr);
 
 			fill_in_replacements(rules[idx]->pattern, expr,
-				replacements, &repl_cnt);
+				repl_ary, &repl_cnt);
 
-			r = perform_replacement(rules[idx], var, replacements, rules[idx]->replacement);
+			r = perform_replacement(rules[idx], var, repl_ary, rules[idx]->replacement);
 
-			free(replacements);
+#ifndef DESPARATE
+			free(repl_ary);
+#endif
+			repl_ary = NULL;
 
 			break;  /* only do the first rule you find. */
 		}
@@ -431,10 +450,9 @@ calculate_strings(struct abs_node *node, struct buffer *b)
 		if ('*' != node->label[0])
 			sprintf(pattern_string, "%s%s", buf, node->label);
 		else {
-			/* Special case leaf-node labels: "*", "*-", "*+".
+			/* Special case leaf-node labels: "*", "*-", "*+", "*!", "*^".
 			 * Somewhat confusing, as a struct abs_node with typ == abs_LEAF
 			 * can represent a LEAF or an application node in the subject tree.
-			 * 
 			 */
 			switch (node->label[1])
 			{
@@ -445,6 +463,7 @@ calculate_strings(struct abs_node *node, struct buffer *b)
 			case '+':
 			case '-':
 			case '!':
+			case '^':
 				sprintf(pattern_string, "%s%c", buf, node->label[1]);
 				break;
 			}

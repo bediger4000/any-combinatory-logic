@@ -24,7 +24,7 @@ Solaris 2.8, probably original AT&T Bell Labs lex, needed this:
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
-/* $Id: lex.l,v 1.11 2011/06/12 18:22:01 bediger Exp $ */
+/* $Id: lex.l,v 1.13 2011/07/10 23:38:43 bediger Exp $ */
 
 
 #include <stdio.h>
@@ -72,8 +72,6 @@ extern char *current_prompt;
 int old_prompting = -1;
 
 
-	extern FILE *yyin;
-	extern int lineno;
 	extern const char *current_input_stream;
 %}
 
@@ -93,6 +91,7 @@ int old_prompting = -1;
 "\*+"       { return TK_ABSTR_ANY_WITH; /* sub-tree contains abstracted variable */ }
 "\*-"       { return TK_ABSTR_ANY_WO;   /* sub-tree does not contain abstracted variable */}
 "\*!"       { return TK_ABSTR_COMBINATOR;   /* sub-tree does not contain ANY variable */}
+"\*^"       { return TK_ABSTR_MATCH;   /* sub-tree lexically matches another subtree. */}
 "\*"        { return TK_ABSTR_ANY; }
 "_"         { return TK_ABSTRACTED_VAR; }
 "def"       { return TK_DEF; }

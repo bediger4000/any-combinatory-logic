@@ -56,3 +56,6 @@ S S (K S)
 S S (K S)
 S S (K (S S))
 S S (K (S S))
+S (K (S S (S (S S K)))) K
+S (K (S S (S (S S K)))) K
+Equivalent
