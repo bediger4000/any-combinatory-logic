@@ -1,0 +1,31 @@
+# Exercize "on" and "off" special case in lexer
+load "on"
+load "\on"
+load "off"
+load "\off"
+load on
+load off
+load yowza
+rule: I 1 -> 1
+rule: K 1 2 -> 1
+rule: S 1 2 3 -> 1 3 (2 3)
+abstraction: [_] *- -> K 1
+abstraction: [_] _ -> I
+abstraction: [_] *- _ -> 1
+abstraction: [_] * * -> S ([_] 1) ([_] 2)
+([on] on on) x
+([off] off (m off)) x
+def on I
+on a
+def off I
+off b
+debug on
+debug off
+elaborate on
+elaborate off
+trace on
+trace off
+step on
+step off
+abstraction: [_] on * -> K 2
+abstraction: [_] * off -> K 1

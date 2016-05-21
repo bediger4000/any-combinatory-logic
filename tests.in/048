@@ -1,0 +1,18 @@
+# From Johannes Waldmann's thesis, "The Combinator S", section 5.4, "Monsters".
+# "A monster is a term with a normal form that is very large and many reduction
+# steps away.
+# Section 5.4.1. Ax Ay S are monsters.
+rule: S 1 2 3 -> 1 3 (2 3)
+trace on
+def A0 S
+def T1 (S S)
+def A1 (T1 A0)
+def A2 (T1 A1)
+def A3 (T1 A2)
+def A4 (T1 A3)
+def A5 (T1 A4)
+def A6 (T1 A5)
+
+# Try to trigger a number of struct buffer resizes, resize_buffer()
+# function in buffer.c
+A3 A2 S

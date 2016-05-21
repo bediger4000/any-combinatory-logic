@@ -1,0 +1,98 @@
+W{1} {5} (W{2} {4} K{3}) {7} x{6}
+W{1} {5} (W{2} {4} K{3}) {7} x{6} {9}+ ()
+push left branch on stack, depth now 2
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 2: W{1} {5} (W{2} {4} K{3}) {7}+ x{6} {9} ()
+direction left
+direction now left
+push left branch on stack, depth now 3
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 3: W{1} {5}+ (W{2} {4} K{3}) {7} x{6} {9} ()
+direction left
+direction now left
+push left branch on stack, depth now 4
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 4: W{1}+ {5} (W{2} {4} K{3}) {7} x{6} {9} ()
+direction left
+direction now left
+W reduction (sn 1), stack depth 4, before: W{1}+ {5} (W{2} {4} K{3}) {7} x{6}
+pop stack 3 items
+performed reduction, popped 3, stack depth now 1: W{2} {4} K{3} {10} x{6} {11} x{6} {9}+ ()
+direction left
+direction now left
+W reduction, after: W{2} {4} K{3} {10} x{6} {11} x{6}
+W{2} {4} K{3} {10} x{6} {11} x{6}
+push left branch on stack, depth now 2
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 2: W{2} {4} K{3} {10} x{6} {11}+ x{6} {9} ()
+direction left
+direction now left
+push left branch on stack, depth now 3
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 3: W{2} {4} K{3} {10}+ x{6} {11} x{6} {9} ()
+direction left
+direction now left
+push left branch on stack, depth now 4
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 4: W{2} {4}+ K{3} {10} x{6} {11} x{6} {9} ()
+direction left
+direction now left
+push left branch on stack, depth now 5
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 5: W{2}+ {4} K{3} {10} x{6} {11} x{6} {9} ()
+direction left
+direction now left
+W reduction (sn 2), stack depth 5, before: W{2}+ {4} K{3} {10} x{6} {11} x{6}
+pop stack 3 items
+performed reduction, popped 3, stack depth now 2: K{3} {7} x{6} {5} x{6} {11}+ x{6} {9} ()
+direction left
+direction now left
+W reduction, after: K{3} {7} x{6} {5} x{6} {11}+ x{6}
+K{3} {7} x{6} {5} x{6} {11} x{6}
+push left branch on stack, depth now 3
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 3: K{3} {7} x{6} {5}+ x{6} {11} x{6} {9} ()
+direction left
+direction now left
+push left branch on stack, depth now 4
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 4: K{3} {7}+ x{6} {5} x{6} {11} x{6} {9} ()
+direction left
+direction now left
+push left branch on stack, depth now 5
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 5: K{3}+ {7} x{6} {5} x{6} {11} x{6} {9} ()
+direction left
+direction now left
+K reduction (sn 3), stack depth 5, before: K{3}+ {7} x{6} {5} x{6} {11} x{6}
+pop stack 3 items
+performed reduction, popped 3, stack depth now 2: x{6} {11}+ x{6} {9} ()
+direction left
+direction now left
+K reduction, after: x{6} {11}+ x{6}
+x{6} {11} x{6}
+push left branch on stack, depth now 3
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 3: x{6}+ {11} x{6}+ {9} ()
+direction left
+direction now left
+x atom, stack depth 3, required depth -1.
+pop stack 1 items
+didn't performed reduction, popped 1, stack depth now 2: x{6} {11}+ x{6} {9} ()
+direction left
+direction now right
+push right branch on stack, depth now 2
+pop stack 0 items
+didn't performed reduction, popped 0, stack depth now 2: x{6}+ {11} x{6}+ {9} ()
+direction right
+direction now left
+x atom, stack depth 2, required depth -1.
+pop stack 1 items
+didn't performed reduction, popped 1, stack depth now 2: x{6} {11}+ x{6} {9} ()
+direction left
+direction now up
+pop stack 1 items
+didn't performed reduction, popped 1, stack depth now 1: x{6} {11} x{6} {9}+ ()
+direction up
+direction now up
+x x

@@ -1,0 +1,8 @@
+# Exercize some otherwise un-executed code branches in
+# print_tree() in node.c
+rule: W 1 2 -> 1 2 2
+rule: K 1 2 -> 1
+trace on
+elaborate on
+debug on
+W (W K) x
