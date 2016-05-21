@@ -34,3 +34,7 @@ do
 		echo "No desired output specified for $OUTPUT"
 	fi
 done
+
+# Put some coverage tests here that exercize setting command line flags
+./acl -p -x > /dev/null 2>&1
+./acl -p -c -d -e -N 10 -s -T 150 -t < /dev/null 2>&1

@@ -15,7 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with acl; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-# $Id: makefile,v 1.8 2010/07/30 13:01:22 bediger Exp $
+# $Id: makefile,v 1.9 2010/12/21 04:00:37 bediger Exp $
 all:
 	@echo "Try one of these:"
 	@echo "make cc"   "- very generic"
@@ -31,7 +31,7 @@ clang:
 cc:
 	make CC=cc YACC='yacc -d -v -t ' LEX=lex CFLAGS='-I. -g ' build
 gnu:
-	make CC=gcc YACC='bison -d -b y' LEX=flex CFLAGS='-I. -g  -Wall ' build
+	make CC=gcc YACC='bison -d -b y ' LEX=flex CFLAGS='-I. -g  -Wall -O2 ' build
 mudflap:
 	make CC=gcc YACC='bison -d -b y' LEX=flex CFLAGS='-I. -g -fmudflap -Wall' LIBS=-lmudflap build
 coverage:
