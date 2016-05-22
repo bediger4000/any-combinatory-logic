@@ -8,7 +8,7 @@
 
 # Table of contents
 
-1.  [Introduction](#Introduction)
+1.  [Introduction](#introduction)
 2.  [Starting](#starting-the-interpreter)
 3.  [Using](#using-the-interpreter)
 4.  [Defining Primitives](#defining-primitives)
@@ -28,11 +28,11 @@ speed and a finite memory. Most or all formal systems fail to take these limits
 into account.
 
 `acl` differs from other interpreters in that the user must [specify any
-primitives](#Defining-Primitives) to the interpreter. It has no built-in atomic
+primitives](#defining-primitives) to the interpreter. It has no built-in atomic
 primitive combinators.
 
 `acl` does not have any built-in bracket abstraction algorithms. The user must
-[specify a bracket abstraction algorithm](#Expressing-Bracket-Abstraction-Algorithms) before doing bracket
+[specify a bracket abstraction algorithm](#expressing-bracket-abstraction-algorithms) before doing bracket
 abstraction on a term. The user must specify primitives before using them in a
 bracket abstraction rule definition.
 
@@ -41,7 +41,7 @@ Without specifying any primitives, the interpreter checks the syntax of
 
 #Starting the interpreter
 
-After [building the interpreter's executable](#Building-and-Installing),
+After [building the interpreter's executable](#building-and-installing),
 you can start it from the command line:
 
     $ ./acl
@@ -49,7 +49,7 @@ you can start it from the command line:
 
 The interpreter uses `ACL>` as its prompt for user input. `acl` has a strict
 grammar, so you must type in either a [term](#GRAMMAR) for reduction, or an
-[interpreter command](#Interpreter-Commands), or a command to [examine a term](#EXAMINE).
+[interpreter command](#interpreter-commands), or a command to [examine a term](#EXAMINE).
 
 A keyboard interrupt (almost always control-C) can interrupt whatever
 long-running reduction currently takes place. A keyboard interrupt at the
@@ -80,7 +80,7 @@ outermost contraction gets evaluated first.
 
 The `-e` or `-s` options have no use without the `-t` option, but `-t` alone might have some use.
 
-`-L _filename_` can occur more than one time. `acl` will interpret the files in the order they appear on the command line. After interpreting the last (or only) file, it prints the `ACL>` prompt, then waits for interactive user input. This command line flag pre-loads files. To interpret files during an interactive session, use the [`load`](#LOAD) command.
+`-L *filename*` can occur more than one time. `acl` will interpret the files in the order they appear on the command line. After interpreting the last (or only) file, it prints the `ACL>` prompt, then waits for interactive user input. This command line flag pre-loads files. To interpret files during an interactive session, use the [`load`](#LOAD) command.
 
 #Using the interpreter
 
@@ -107,12 +107,12 @@ and output redirection.
 
 Expressions consist of either a single term, or two (perhaps implicitly
 parenthesized) terms. Terms consist of either a [user-defined
-primitive](#Defining-Primitives) or a variable, or a parenthesized expression.
-The [`reduce`](#REDUCE) command, and [bracket abstraction](#Expressing-Bracket-Abstraction-Algorithms) each
+primitive](#defining-primitives) or a variable, or a parenthesized expression.
+The [`reduce`](#REDUCE) command, and [bracket abstraction](#expressing-bracket-abstraction-algorithms) each
 produce an expression.
 
 Variables (which can also serve as [abbreviations](#ABBREVS) or names of
-[user-defined primitives](#Defining-Primitives)) look like C or Java style
+[user-defined primitives](#defining-primitives)) look like C or Java style
 identifiers. An identifier consists of a letter, followed by zero or more
 letters or underscores. Variables, abbreviations and user-defined primitives
 share the same name space. You can't have an abbreviation with the same name as
@@ -145,13 +145,21 @@ The interpreter prints out normal forms in minimal-parentheses style. Users have
 
 Defining a primitive means getting the interpreter to read a line having this form:
 
-<pre>rule: _Name_ _n<sub>i</sub>_ _..._ ->  _m<sub>i</sub>_ _..._</pre>
+    rule: *Name* *n<sub>i</sub>* *...* ->  *m<sub>i</sub>* *...</pre>
 
-The `_Name_` becomes the primitive's name when used in a CL expression. `_Name_` has the same format as a C or Java language identifier: a letter followed by zero or more letters, digits or underscores.
+The `*Name*` becomes the primitive's name when used in a CL expression.
+`*Name*` has the same format as a C or Java language identifier: a letter
+followed by zero or more letters, digits or underscores.
 
-The `_n<sub>i</sub>_` symbols represent ascending-value digits, beginning with 1\. These consitute the required arguments of the primitive under definition.
+The `*n<sub>i</sub>*` symbols represent ascending-value digits, beginning with
+1\. These consitute the required arguments of the primitive under definition.
 
-The `_m<sub>i</sub>_` symbols also represent digits, which must also appear as `_n<sub>i</sub>_` arguments. They represent the positions of arguments after the primitive reduces. You can delete, rearrange, duplicate and compose arguments, but you can't introduce other non-argument results. You can only define "proper" combinators. You can define "regular" or "irregular" combinators.
+The `*m<sub>i</sub>*` symbols also represent digits, which must also appear as
+`*n<sub>i</sub>*` arguments. They represent the positions of arguments after
+the primitive reduces. You can delete, rearrange, duplicate and compose
+arguments, but you can't introduce other non-argument results. You can only
+define "proper" combinators. You can define "regular" or "irregular"
+combinators.
 
 ### Examples
 
@@ -162,65 +170,86 @@ The `_m<sub>i</sub>_` symbols also represent digits, which must also appear as `
 *   The **K** combinator: `rule: K 1 2 -> 1`
 *   The identity combinator: `rule: I 1 -> 1`
 
-The interpreter imposes no limits on number of primitives the user defines, or on the number of arguments a given primitive uses or produces. Defining large numbers of primitives will slow it down, as will reducing a primitive that has a large number of arguments, or produces a large number of results in a reduced term.
+The interpreter imposes no limits on number of primitives the user defines, or
+on the number of arguments a given primitive uses or produces. Defining large
+numbers of primitives will slow it down, as will reducing a primitive that has
+a large number of arguments, or produces a large number of results in a reduced
+term.
 
-You can redefine a primitive with another `rule:` input which uses the name to be redefined. You cannot delete a primitive, once you have defined it. You have to exit the interpreter to "delete" pimitives.
+You can redefine a primitive with another `rule:` input which uses the name to
+be redefined. You cannot delete a primitive, once you have defined it. You have
+to exit the interpreter to "delete" pimitives.
 
 ### Primitives versus abbreviations
 
-At first glance, a user defined primitive and an [abbreviation](#ABBREVS) appear redundant. Differences exist, both subtle and gross.
+At first glance, a user defined primitive and an [abbreviation](#ABBREVS)
+appear redundant. Differences exist, both subtle and gross.
 
-One gross difference: primitives only rearrange, delete, duplicate or regroup their arguments. An abbreviation (in the form of a bracket abstracted expression) can insert primitives. No way to construct an "improper" primitive exists, but abbreviations can do this. Abbreviations can refer to a fixed point combinator. You cannot define a fixed point combinator as a primitive.
+One gross difference: primitives only rearrange, delete, duplicate or regroup
+their arguments. An abbreviation (in the form of a bracket abstracted
+expression) can insert primitives. No way to construct an "improper" primitive
+exists, but abbreviations can do this. Abbreviations can refer to a fixed point
+combinator. You cannot define a fixed point combinator as a primitive.
 
-`acl` abbreviations work in a way that encourages the user to build up complex terms by abbreviating smaller, simpler terms, then invoking all the abbreviations together. For example, you could build up a fixed-point combinator like this:
+`acl` abbreviations work in a way that encourages the user to build up complex
+terms by abbreviating smaller, simpler terms, then invoking all the
+abbreviations together. For example, you could build up a fixed-point
+combinator like this:
 
 <pre>ACL> def subexpr (x y x)
 ACL> def Y ([x,y] subexpr)([y,x] (y subexpr))
 </pre>
 
-This contrived example illustrates the use of abbreviating a common sub-expression, as well as demonstrating that an abbreviation isn't "atomic". The bracket abstractions capture what the user defines as free variables.
+This contrived example illustrates the use of abbreviating a common
+sub-expression, as well as demonstrating that an abbreviation isn't "atomic".
+The bracket abstractions capture what the user defines as free variables.
 
-A more subtle distinction exists in that primitives reduce atomically: normal-order evaluation doesn't take place "inside" a primitive. An example follows to clarify.
+A more subtle distinction exists in that primitives reduce atomically:
+normal-order evaluation doesn't take place "inside" a primitive. An example
+follows to clarify.
 
 <pre>ACL> rule: S 1 2 3 -> 1 3 (2 3)
 ACL> rule: I 1 -> 1
 ACL> def M (S I I)
-ACL> trace on     _show expression after each contraction_
-ACL> detect on    _mark reducible primitives with '*'_
-ACL> step on      _single-step, pause after each contraction_
+ACL> trace on     *show expression after each contraction*
+ACL> detect on    *mark reducible primitives with '\*'*
+ACL> step on      *single-step, pause after each contraction*
 ACL> M M
 S I I (S I I)
-continue? _return_
-[2] I* (S I I) (I* (S I I))   _even out-of-order contractible primitives marked with '*'_
-continue? _return_
-[2] S* I I (I* (S I I))
-continue? _return_
-[4] I* (I* (S I I)) (I* (I* (S I I)))
-continue? _return_
-[3] I* (S I I) (I* (I* (S I I)))
-continue? _return_
-[3] S* I I (I* (I* (S I I)))
-continue? _return_
-[6] I* (I* (I* (S I I))) (I* (I* (I* (S I I))))
-continue? q _return_
+continue? *return*
+[2] I\* (S I I) (I\* (S I I))   *even out-of-order contractible primitives marked with '\*'*
+continue? *return*
+[2] S\* I I (I\* (S I I))
+continue? *return*
+[4] I\* (I\* (S I I)) (I\* (I\* (S I I)))
+continue? *return*
+[3] I\* (S I I) (I\* (I\* (S I I)))
+continue? *return*
+[3] S\* I I (I\* (I\* (S I I)))
+continue? *return*
+[6] I\* (I\* (I\* (S I I))) (I\* (I\* (I\* (S I I))))
+continue? q *return*
 Terminated
 ACL>
 </pre>
 
-Each abbreviation `M` gets expanded into a term `S I I`. The `S I I` terms get evaluated in normal order, leftmost-outermost contraction happens first. This leads to an infinitely expanding term, not the `M M` → `M M` cycle that one might naively hope for.
+Each abbreviation `M` gets expanded into a term `S I I`. The `S I I` terms get
+evaluated in normal order, leftmost-outermost contraction happens first. This
+leads to an infinitely expanding term, not the `M M` → `M M` cycle that one
+might naively hope for.
 
 To achieve an `M M` → `M M` cycle, the user could define `M` as a primitive.
 
 <pre>ACL> rule: M 1 -> 1 1
-ACL> cycles on    _detect cyclical reductions_
-ACL> trace on     _show expression after each contraction_
-ACL> detect on    _mark reducible primitives with '*'_
+ACL> cycles on    *detect cyclical reductions*
+ACL> trace on     *show expression after each contraction*
+ACL> detect on    *mark reducible primitives with '\*'*
 ACL> M M
 M M
-[1] M* M
-[1] M* M
+[1] M\* M
+[1] M\* M
 Found a pure cycle of length 1, 1 terms evaluated, ends with ".M M"
-[1] M* M
+[1] M\* M
 </pre>
 
 #Expressing Bracket Abstraction Algorithms
@@ -280,7 +309,7 @@ The right-hand-side (_rhs_) also looks like a valid CL term, except that it can 
 
 The order in which the user enters rules amounts to specifying precedence. The first rule entered at the `ACL>` prompt has the highest precedence. The last rule entered has the lowest precedence.
 
-The user must [define primitives](#Defining-Primitives) before using them in a right-hand-side. Otherwise, what appears as a "primitive" will actually constitute a free variable with a confusingly identical name.
+The user must [define primitives](#defining-primitives) before using them in a right-hand-side. Otherwise, what appears as a "primitive" will actually constitute a free variable with a confusingly identical name.
 
 ### Bracket Abstraction Rule Examples
 
@@ -341,7 +370,7 @@ The "*^" special symbol can appear more than once, should you find it interestin
 
 `def` makes an easy-to-type abbreviation of `define`.
 
-<a name="REDUCE">The `reduce` command</a> actually produces an expression, just like a bracket abstraction. Unlike `define` or `def`, you can use `reduce` anywhere an expression would fit, as part of a larger expression, as part of an abbreviation, or as part of a bracket abstraction.
+<a name="REDUCE"></a>The `reduce` command actually produces an expression, just like a bracket abstraction. Unlike `define` or `def`, you can use `reduce` anywhere an expression would fit, as part of a larger expression, as part of an abbreviation, or as part of a bracket abstraction.
 
 `reduce` causes an out-of-order (normal order, leftmost outermost) reduction to take place. The expression next to `reduce` gets interpreted, and the result put back into the original context. `reduce` allows a user to store the normal form of an expression, rather than just a literal expression, as `def` and `define` don't cause any contractions to take place.
 
@@ -406,7 +435,7 @@ You can issue any of these commands without an "on" or "off" argument to inquire
 
 You can turn time outs off by using a 0 (zero) second timeout. Similarly, you can turn contraction-count-limited evaluation off with a 0 (zero) count.
 
-`timer on` also times [bracket abstraction](#Expressing-Bracket-Abstraction-Algorithms).
+`timer on` also times [bracket abstraction](#expressing-bracket-abstraction-algorithms).
 
 ## <a name="LOAD">Reading in files</a>
 
