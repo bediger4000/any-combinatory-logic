@@ -9,9 +9,9 @@ _last revision: 2011-06-12_
 # Table of contents
 
 1.  [Introduction](#INTRO)
-2.  [Starting](#STARTING)
-3.  [Using](#RUNNING)
-4.  [Defining Primitives](#RULES)
+2.  [Starting](#Starting-the-interpreter)
+3.  [Using](#Using-the-interpreter)
+4.  [Defining Primitives](#Defining-Primitives)
 5.  [Expressing Bracket Abstraction Algorithms](#BRACKETS)
 6.  [Interpreter Commands](#COMMANDS)
 7.  [Examples](#EXAMPLES)
@@ -22,9 +22,9 @@ _last revision: 2011-06-12_
 
 This document describes how to build and use `acl` v1.2.
 
-`acl` ("_A_ny _C_ombinatory _L_ogic") interprets programming languages with similarities to various "Combinatory Logic" (CL) formal systems. It doesn't interpret any "Combinatory Logic" in that it runs on computers with finite CPU speed and a finite memory. Most or all formal systems fail to take these limits into account.
+`acl` (_A_ny _C_ombinatory _L_ogic) interprets programming languages with similarities to various "Combinatory Logic" (CL) formal systems. It doesn't interpret any "Combinatory Logic" in that it runs on computers with finite CPU speed and a finite memory. Most or all formal systems fail to take these limits into account.
 
-`acl` differs from other interpreters in that the user must [specify any primitives](#RULES) to the interpreter. It has no built-in atomic primitive combinators.
+`acl` differs from other interpreters in that the user must [specify any primitives](#Defining-Primitives) to the interpreter. It has no built-in atomic primitive combinators.
 
 `acl` does not have any built-in bracket abstraction algorithms. The user must [specify a bracket abstraction algorithm](#BRACKETS) before doing bracket abstraction on a term. The user must specify primitives before using them in a bracket abstraction rule definition.
 
@@ -32,25 +32,33 @@ Without specifying any primitives, the interpreter checks the syntax of "applica
 
 Release 1.2 of `acl` includes '*^' special symbol in bracket abstraction specifications.
 
-[Another page](cl/) documents the design and implementation of a less general Combinatory Logic interpreter. That document still holds as a good description of the interpretation of applicative structures that `acl` performs.
+# Starting the interpreter
 
-# <a name="STARTING">Starting</a> the interpreter
-
-After [downloading](#DOWNLOADS) or [building the interpreter's executable](#INSTALL), you can start it from the command line:
+After [downloading](#DOWNLOADS) or [building the interpreter's executable](#INSTALL),
+you can start it from the command line:
 
 <pre> 7:57AM 87 % ./acl
 ACL>
 </pre>
 
-The interpreter uses "`ACL>`" as its prompt for user input. `acl` has a strict grammar, so you must type in either a [term](#GRAMMAR) for reduction, or an [interpreter command](#COMMANDS), or a command to [examine a term](#EXAMINE).
+The interpreter uses `ACL>` as its prompt for user input. `acl` has a strict
+grammar, so you must type in either a [term](#GRAMMAR) for reduction, or an
+[interpreter command](#COMMANDS), or a command to [examine a term](#EXAMINE).
 
-A keyboard interrupt (almost always control-C) can interrupt whatever long-running reduction currently takes place. A keyboard interrupt at the "`ACL>`" prompt will cause the interpreter to exit.
+A keyboard interrupt (almost always control-C) can interrupt whatever
+long-running reduction currently takes place. A keyboard interrupt at the
+`ACL>` prompt will cause the interpreter to exit.
 
 You have to use keyboard end-of-file (usually control-D) to exit `acl`.
 
-Giving the interpreter a CL term causes it to execute the usual functional language interpreter's read-eval-print loop. The interpreter prints the input in a minimally-parenthesized representation, reduces to normal form, and prints a text representation of the normal form. It prints a prompt, and waits for another user input.
+Giving the interpreter a CL term causes it to execute the usual functional
+language interpreter's read-eval-print loop. The interpreter prints the input
+in a minimally-parenthesized representation, reduces to normal form, and prints
+a text representation of the normal form. It prints a prompt, and waits for
+another user input.
 
-`acl` does standard Combinatory Logic "normal order" evaluation. The leftmost outermost contraction gets evaluated first.
+`acl` does standard Combinatory Logic "normal order" evaluation. The leftmost
+outermost contraction gets evaluated first.
 
 ## Command line options
 
@@ -68,7 +76,7 @@ The `-e` or `-s` options have no use without the `-t` option, but `-t` alone mig
 
 `-L _filename_` can occur more than one time. `acl` will interpret the files in the order they appear on the command line. After interpreting the last (or only) file, it prints the `ACL>` prompt, then waits for interactive user input. This command line flag pre-loads files. To interpret files during an interactive session, use the [`load`](#LOAD) command.
 
-# <a name="RUNNING">Using</a> the interpreter
+# Using the interpreter
 
 ## Interactive input
 
@@ -76,11 +84,11 @@ I designed `acl` for use as an interactive system, with a user typing CL express
 
 After entering an entire expression, the user types "return" or "enter" to trigger evaluation.
 
-The built-in prompt for input is the string "`ACL>`". It appears when the interpreter starts up, or has finished reducing whatever expression the user gave it last, or it has executed an interpreter command.
+The built-in prompt for input is the string `ACL>`. It appears when the interpreter starts up, or has finished reducing whatever expression the user gave it last, or it has executed an interpreter command.
 
 You have to type an end-of-file character (almost always control-D) to quit, as it has no built-in "exit" or "quit" command.
 
-A keyboard interrupt (almost always control-C) can interrupt whatever long-running reduction currently takes place, returning the user to the `ACL>` prompt. A keyboard interrupt at the "`ACL>`" prompt will cause the interpreter to exit.
+A keyboard interrupt (almost always control-C) can interrupt whatever long-running reduction currently takes place, returning the user to the `ACL>` prompt. A keyboard interrupt at the `ACL>` prompt will cause the interpreter to exit.
 
 ### Non-interactive input
 
@@ -88,9 +96,9 @@ The `-p` command line option causes the interpreter to not print a prompt. This 
 
 ### <a name="GRAMMAR">Grammar</a>, briefly
 
-Expressions consist of either a single term, or two (perhaps implicitly parenthesized) terms. Terms consist of either a [user-defined primitive](#RULES) or a variable, or a parenthesized expression. The [`reduce`](#REDUCE) command, and [bracket abstraction](#BRACKETS) each produce an expression.
+Expressions consist of either a single term, or two (perhaps implicitly parenthesized) terms. Terms consist of either a [user-defined primitive](#Defining-Primitives) or a variable, or a parenthesized expression. The [`reduce`](#REDUCE) command, and [bracket abstraction](#BRACKETS) each produce an expression.
 
-Variables (which can also serve as [abbreviations](#ABBREVS) or names of [user-defined primitives](#RULES)) look like C or Java style identifiers. An identifier consists of a letter, followed by zero or more letters or underscores. Variables, abbreviations and user-defined primitives share the same name space. You can't have an abbreviation with the same name as a primitive.
+Variables (which can also serve as [abbreviations](#ABBREVS) or names of [user-defined primitives](#Defining-Primitives)) look like C or Java style identifiers. An identifier consists of a letter, followed by zero or more letters or underscores. Variables, abbreviations and user-defined primitives share the same name space. You can't have an abbreviation with the same name as a primitive.
 
 The interpreter treats combinators and variables as "left associative", the standard in the Combinatory Logic literature. That means that an expression like this: `I a b c d` ends up getting treated as though it had parentheses like this: `((((I a) b) c) d)`
 
@@ -98,11 +106,11 @@ To apply one complex term to another, the user must parenthesize terms. Applying
 
 ### Parentheses
 
-Users can parenthesize input expressions as much or as little as they desire, up to the limits of left-association and the meaning they wish to convey to the interpreter. The grammar used by `acl` does not allow single terms inside paired parentheses. It considers strings like "`(I)`" as syntax errors. You have to put at least two terms inside a pair of parentheses. Parentheses must have a match.
+Users can parenthesize input expressions as much or as little as they desire, up to the limits of left-association and the meaning they wish to convey to the interpreter. The grammar used by `acl` does not allow single terms inside paired parentheses. It considers strings like `(I)` as syntax errors. You have to put at least two terms inside a pair of parentheses. Parentheses must have a match.
 
 The interpreter prints out normal forms in minimal-parentheses style. Users have the opportunity to cut-n-paste output back into the input, as output has valid syntax. No keyboard shortcuts exist to take advantage of any previous output.
 
-# <a name="RULES">Defining Primitives</a>
+# <a name="Defining-Primitives">Defining Primitives</a>
 
 `acl` does not implement any built-in primitives. The user must describe desired primitives to the interpreter.
 
@@ -220,7 +228,7 @@ You input the abstraction algorithm in the form of rules, one per line, in decre
 
 <pre>abstraction: [_] _lhs_ -> _rhs_</pre>
 
-The lexical token "`[_]`" denotes the abstraction of whatever variable the user chooses. It must appear after the `abstraction:` token. It can also appear in the right-hand-side of an abstraction rule, where it will cause recursive abstraction(s).
+The lexical token `[_]` denotes the abstraction of whatever variable the user chooses. It must appear after the `abstraction:` token. It can also appear in the right-hand-side of an abstraction rule, where it will cause recursive abstraction(s).
 
 #### Left Hand Side
 
@@ -245,7 +253,7 @@ The right-hand-side (_rhs_) also looks like a valid CL term, except that it can 
 
 The order in which the user enters rules amounts to specifying precedence. The first rule entered at the `ACL>` prompt has the highest precedence. The last rule entered has the lowest precedence.
 
-The user must [define primitives](#RULES) before using them in a right-hand-side. Otherwise, what appears as a "primitive" will actually constitute a free variable with a confusingly identical name.
+The user must [define primitives](#Defining-Primitives) before using them in a right-hand-side. Otherwise, what appears as a "primitive" will actually constitute a free variable with a confusingly identical name.
 
 ### Bracket Abstraction Rule Examples
 
