@@ -15,31 +15,37 @@ _last revision: 2011-06-12_
 5.  [Expressing Bracket Abstraction Algorithms](#BRACKETS)
 6.  [Interpreter Commands](#COMMANDS)
 7.  [Examples](#EXAMPLES)
-8.  [Downloads](#DOWNLOADS)
-9.  [Building and Installing](#INSTALL)
+8.  [Building and Installing](#INSTALL)
 
 # <a name="INTRO">Introduction</a>
 
 This document describes how to build and use `acl` v1.2.
 
-`acl` (_A_ny _C_ombinatory _L_ogic) interprets programming languages with similarities to various "Combinatory Logic" (CL) formal systems. It doesn't interpret any "Combinatory Logic" in that it runs on computers with finite CPU speed and a finite memory. Most or all formal systems fail to take these limits into account.
+`acl` (_A_ny _C_ombinatory _L_ogic) interprets programming languages with
+similarities to various "Combinatory Logic" (CL) formal systems. It doesn't
+interpret any "Combinatory Logic" in that it runs on computers with finite CPU
+speed and a finite memory. Most or all formal systems fail to take these limits
+into account.
 
-`acl` differs from other interpreters in that the user must [specify any primitives](#Defining-Primitives) to the interpreter. It has no built-in atomic primitive combinators.
+`acl` differs from other interpreters in that the user must [specify any
+primitives](#Defining-Primitives) to the interpreter. It has no built-in atomic
+primitive combinators.
 
-`acl` does not have any built-in bracket abstraction algorithms. The user must [specify a bracket abstraction algorithm](#BRACKETS) before doing bracket abstraction on a term. The user must specify primitives before using them in a bracket abstraction rule definition.
+`acl` does not have any built-in bracket abstraction algorithms. The user must
+[specify a bracket abstraction algorithm](#BRACKETS) before doing bracket
+abstraction on a term. The user must specify primitives before using them in a
+bracket abstraction rule definition.
 
-Without specifying any primitives, the interpreter checks the syntax of "applicative structures", where every atomic term constitutes a free variable.
-
-Release 1.2 of `acl` includes '*^' special symbol in bracket abstraction specifications.
+Without specifying any primitives, the interpreter checks the syntax of
+"applicative structures", where every atomic term constitutes a free variable.
 
 # Starting the interpreter
 
-After [downloading](#DOWNLOADS) or [building the interpreter's executable](#INSTALL),
+After [building the interpreter's executable](#INSTALL),
 you can start it from the command line:
 
-<pre> 7:57AM 87 % ./acl
-ACL>
-</pre>
+    $ ./acl
+    ACL>
 
 The interpreter uses `ACL>` as its prompt for user input. `acl` has a strict
 grammar, so you must type in either a [term](#GRAMMAR) for reduction, or an
@@ -398,33 +404,31 @@ Rules about primitives and abstraction rules should appear in a format appropria
 
 The following examples demonstrate either an interesting facet of Combinatory Logic (Klein fourgroup, Grzegorzyk bracket abstraction, AMEN basis) or illustrates part of the interpreter that I found hard to describe (abstraction rules in Tromp's bracket abstraction, and Scott Numerals example). Your tastes may vary.
 
-*   [SKI Basis](acl/examples/ski.basis), with "abcf" bracket abstraction.
-*   [SKI Basis](acl/examples/tromp.abstraction), with John Tromp's bracket abstraction.
-*   [BWCK Basis](acl/examples/bwck.basis), Grzegorzyk bracket abstraction.
-*   [IJ Basis (λI basis)](acl/examples/ij.basis), including bracket abstraction.
-*   [IBCS Basis (λI basis)](acl/examples/ibcs.basis), with adequate Church Numerals.
-*   [BTMK Basis](acl/examples/btmk.basis), with home-grown bracket abstraction.
-*   [SNC Basis](acl/examples/snc.basis), with home-grown bracket abstraction.
-*   [AMEN Basis](acl/examples/amen.basis), another home-grown bracket abstraction algorithm.
-*   [OAME Basis](acl/examples/oame.basis), bracket abstraction similar to AMEN basis.
-*   [Scott Numerals](acl/examples/scott.numerals) in an 8-combinator basis, and a 9-rule abstraction algorithm.
-*   [D Numerals](acl/examples/d_numerals), where `[x] x` represents 0, `[x]x x` represents 1, …
-*   [Klein fourgroup](acl/examples/fourgroup), with application as the operator.
-*   [Miscellaneous bases](acl/examples/bases.html)
-
-# <a name="DOWNLOADS">Downloads</a>
-
-*   [RPM package](acl/acl-1.2-1.i386.rpm) for x86 linux
-*   [Arch package](acl/acl-1.2-1-i686.pkg.tar.xz) for i686 linux
-*   [Slackware package](acl/acl-1.2-i386-1.tgz) for x86 linux
-*   [Plain old x86 Linux executable](acl/acl)
-*   [Source code](acl/acl-1.2.tar.gz)
+*   [SKI Basis](bases/ski.basis), with "abcf" bracket abstraction.
+*   [SKI Basis](bases/tromp.abstraction), with John Tromp's bracket abstraction.
+*   [BWCK Basis](bases/bwck.basis), Grzegorzyk bracket abstraction.
+*   [IJ Basis (λI basis)](bases/ij.basis), including bracket abstraction.
+*   [IBCS Basis (λI basis)](bases/ibcs.basis), with adequate Church Numerals.
+*   [BTMK Basis](bases/btmk.basis), with home-grown bracket abstraction.
+*   [SNC Basis](bases/snc.basis), with home-grown bracket abstraction.
+*   [AMEN Basis](bases/amen.basis), another home-grown bracket abstraction algorithm.
+*   [OAME Basis](bases/oame.basis), bracket abstraction similar to AMEN basis.
+*   [Scott Numerals](bases/scott.numerals) in an 8-combinator basis, and a 9-rule abstraction algorithm.
+*   [D Numerals](bases/d_numerals), where `[x] x` represents 0, `[x]x x` represents 1, …
+*   [Klein fourgroup](bases/fourgroup), with application as the operator.
+*   [Miscellaneous bases](bases/bases.html)
 
 # <a name="INSTALL">Building and installing</a>
 
-I developed this program on Slackware Linux 12.0, and Arch Linux. I used the C compilers GCC, [LCC](http://www.cs.princeton.edu/software/lcc/), [PCC](http://pcc.ludd.ltu.se/), [TCC](http://bellard.org/tcc/) and [Clang](http://clang.llvm.org/). I tried to make it as ANSI-C as possible by using various compilers, not allowing any compiler warnings when building, and using as many warning flags for GCC compiles as possible.
+I developed this program on Slackware Linux 12.0, and Arch Linux. I used the C
+compilers GCC, [LCC](http://www.cs.princeton.edu/software/lcc/),
+[PCC](http://pcc.ludd.ltu.se/), [TCC](http://bellard.org/tcc/) and
+[Clang](http://clang.llvm.org/). I tried to make it as ANSI-C as possible by
+using various compilers, not allowing any compiler warnings when building, and
+using as many warning flags for GCC compiles as possible.
 
-I expect it will build on any *BSD-based system, but I haven't done that formally. For a BSD system, try `make cc`.
+I expect it will build on any *BSD-based system, but I haven't done that
+formally. For a BSD system, try `make cc`.
 
 ## Licensing
 
@@ -432,13 +436,14 @@ Licensed under GNU Public License v2, or later.
 
 ## Instructions
 
-1.  Get the source code. You can:
-    *   [Download](acl/acl-1.2.tar.gz) via your browser.
-    *   Download using wget: `wget http://www.stratigery.com/acl/acl-1.2.tar.gz`
-2.  Unpack source code. From the command line: `tar xzf acl-1.2.tar.gz`
-3.  Change directory. From the command line: `cd acl-1.2`
-4.  Compile source code. From the command line:
+1.  Compile source code. From the command line:
     *   `make gnu` - for almost every linux distro.
     *   `make cc` - for BSDs and Solaris.`make cc` uses traditionally-unix-named tools, and may work better on Solaris or the BSDs. Traditional, AT&T derived `lex` will require a minor edit to file `lex.l`. You can see what to uncomment at the very top of the file.
-5.  At this point, you can test the newly-compiled executable. From the command line: `./runtests`. Most of the tests should run quite rapidly, in under a second. At least two of the tests run for 30 seconds or so, and at least one of the tests provokes a syntax error message from the interpreter.
-6.  Install the interpreter wherever you want, or you can execute it in-place. To install, use the `cp` or `mv` commands to move or copy the executable to where ever you want it. It does not care what directory it resides in, and it does not look for configuration files anywhere.
+2.  At this point, you can test the newly-compiled executable. From the command
+    line: `./runtests`. Most of the tests should run quite rapidly, in under a
+    second. At least two of the tests run for 30 seconds or so, and at least one of
+    the tests provokes a syntax error message from the interpreter.
+3.  Install the interpreter wherever you want, or you can execute it in-place.
+    To install, use the `cp` or `mv` commands to move or copy the executable to
+ 	where ever you want it. It does not care what directory it resides in, and it
+    does not look for configuration files anywhere.
