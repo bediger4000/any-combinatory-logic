@@ -9,13 +9,13 @@
 # Table of contents
 
 1.  [Introduction](#Introduction)
-2.  [Starting](#Starting-the-interpreter)
-3.  [Using](#Using-the-interpreter)
-4.  [Defining Primitives](#Defining-Primitives)
-5.  [Expressing Bracket Abstraction Algorithms](#Expressing-Bracket-Abstraction-Algorithms)
-6.  [Interpreter Commands](#Interpreter-Commands)
-7.  [Examples](#Examples)
-8.  [Building and Installing](#Building-and-Installing)
+2.  [Starting](#starting-the-interpreter)
+3.  [Using](#using-the-interpreter)
+4.  [Defining Primitives](#defining-primitives)
+5.  [Expressing Bracket Abstraction Algorithms](#expressing-bracket-abstraction-algorithms)
+6.  [Interpreter Commands](#interpreter-commands)
+7.  [Examples](#examples)
+8.  [Building and Installing](#building-and-installing)
 
 # Introduction
 
