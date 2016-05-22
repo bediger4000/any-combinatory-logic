@@ -1,8 +1,8 @@
-# acl: Generalized Combinatory Logic Interpreter
+#acl: Generalized Combinatory Logic Interpreter
 
 ## version 1.2
 
-_last revision: 2011-06-12_
+*last revision: 2011-06-12*
 
 [Bruce Ediger](mailto:bediger@stratigery.com)
 
@@ -39,7 +39,7 @@ bracket abstraction rule definition.
 Without specifying any primitives, the interpreter checks the syntax of
 "applicative structures", where every atomic term constitutes a free variable.
 
-# Starting the interpreter
+#Starting the interpreter
 
 After [building the interpreter's executable](#Building-and-Installing),
 you can start it from the command line:
@@ -82,7 +82,7 @@ The `-e` or `-s` options have no use without the `-t` option, but `-t` alone mig
 
 `-L _filename_` can occur more than one time. `acl` will interpret the files in the order they appear on the command line. After interpreting the last (or only) file, it prints the `ACL>` prompt, then waits for interactive user input. This command line flag pre-loads files. To interpret files during an interactive session, use the [`load`](#LOAD) command.
 
-# Using the interpreter
+#Using the interpreter
 
 ## Interactive input
 
@@ -103,7 +103,7 @@ only has use for non-interactive input. The interpreter does read from stdin
 and write to stdout. You can use it as a non-interactive "filter", with input
 and output redirection.
 
-### <a name="GRAMMAR">Grammar</a>, briefly
+###Grammar, briefly
 
 Expressions consist of either a single term, or two (perhaps implicitly
 parenthesized) terms. Terms consist of either a [user-defined
@@ -126,7 +126,7 @@ like this: `((((I a) b) c) d)`
 To apply one complex term to another, the user must parenthesize terms.
 Applying `W (W K)` to `C W` would look like this: `(W (W K)) (C W)`.
 
-### Parentheses
+###Parentheses
 
 Users can parenthesize input expressions as much or as little as they desire,
 up to the limits of left-association and the meaning they wish to convey to the
@@ -137,7 +137,7 @@ match.
 
 The interpreter prints out normal forms in minimal-parentheses style. Users have the opportunity to cut-n-paste output back into the input, as output has valid syntax. No keyboard shortcuts exist to take advantage of any previous output.
 
-# <a name="Defining-Primitives">Defining Primitives</a>
+#Defining Primitives
 
 `acl` does not implement any built-in primitives. The user must describe desired primitives to the interpreter.
 
@@ -223,7 +223,7 @@ Found a pure cycle of length 1, 1 terms evaluated, ends with ".M M"
 [1] M* M
 </pre>
 
-# Expressing Bracket Abstraction Algorithms
+#Expressing Bracket Abstraction Algorithms
 
 "Bracket abstraction" names the process of creating a CL expression without specified variables, that when evaluated with appropriate arguments, ends up giving you the original expression with the specified variables.
 
@@ -321,7 +321,7 @@ Rule 8 above features the '*^' special symbol. This rule triggers an abstraction
 
 The "*^" special symbol can appear more than once, should you find it interesting to do so. All sub-trees marked with a '*^' must compare identically to trigger the abstraction rule. More than one abstraction rule can contain '*^' symbols, but the lexical identity only gets checked during examination of a single rule. Lexical identity does not get checked "across rules".
 
-# Interpreter Commands
+#Interpreter Commands
 
 *   [Defining abbreviations](#ABBREVS)
 *   [Information about expressions](#EXAMINE)
@@ -421,7 +421,7 @@ You have to double-quote filenames with whitespace or non-alphanumeric character
 
 Rules about primitives and abstraction rules should appear in a format appropriate for cut-n-paste, that is, in input syntax. Abstraction rules should appear in order of precedence, highest precedence first.
 
-# Examples
+#Examples
 
 The following examples demonstrate either an interesting facet of Combinatory Logic (Klein fourgroup, Grzegorzyk bracket abstraction, AMEN basis) or illustrates part of the interpreter that I found hard to describe (abstraction rules in Tromp's bracket abstraction, and Scott Numerals example). Your tastes may vary.
 
@@ -439,7 +439,7 @@ The following examples demonstrate either an interesting facet of Combinatory Lo
 *   [Klein fourgroup](bases/fourgroup), with application as the operator.
 *   [Miscellaneous bases](bases/bases.html)
 
-# Building and installing
+#Building and installing
 
 I developed this program on Slackware Linux 12.0, and Arch Linux. I used the C
 compilers GCC, [LCC](http://www.cs.princeton.edu/software/lcc/),
