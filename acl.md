@@ -161,17 +161,17 @@ desired primitives to the interpreter.
 
 Defining a primitive means getting the interpreter to read a line having this form:
 
-    rule: Name n<sub>i</sub> ... ->  m<sub>i</sub> ...
+    rule: Name a [b [c ...]] ->  m ...
 
 The `Name` becomes the primitive's name when used in a CL expression.
 `Name` has the same format as a C or Java language identifier: a letter
 followed by zero or more letters, digits or underscores.
 
-The n<sub>i</sub> symbols represent ascending-value digits, beginning with 1.
+The `a`, `b`, `c` ... symbols represent ascending-value digits, beginning with 1.
 These consitute the required arguments of the primitive under definition.
 
-The m<sub>i</sub symbols also represent digits, which must also appear as
-n<sub>i</sub> arguments. They represent the positions of arguments after
+The `m` ... symbols also represent digits, which must also appear as
+`a`, `b`, `c` arguments. They represent the positions of arguments after
 the primitive reduces. You can delete, rearrange, duplicate and compose
 arguments, but you can't introduce other non-argument results. You can only
 define "proper" combinators. You can define "regular" or "irregular"
@@ -381,7 +381,7 @@ this:
 
 Tromp writes rule 5 above as:
 
-    _λ<sup>2</sup>x.(x M x) ≡ λ<sup>2</sup>x.(S S K x M)
+> λ<sup>2</sup>x.(x M x) ≡ λ<sup>2</sup>x.(S S K x M)
 
 The abstracted variable `x` appears in the right- and left-hand-side of the
 rule as `_` . Tromp's `M` appears as `*` on lhs and `2` on rhs of the `acl`
@@ -423,9 +423,9 @@ a single rule. Lexical identity does not get checked "across rules".
 
 ## Defining abbreviations
 
-*   `define _name_ _expression_`
-*   `def _name_ _expression_`
-*   `reduce _expression_`
+*   `define name expression`
+*   `def name expression`
+*   `reduce expression`
 
 `define` and `def` allow a user to introduce "abbreviations" to the input later. Using `define` or `def` causes `acl` to keep an internal copy of the expression so abbreviated. When the abbreviation appears in an input expression, `acl` puts a copy of the internal-held expression in the input. No matter how complex the expression, an abbreviation comprises a single term. Effectively, the interpreter puts the expanded abbreviation inside a pair of parentheses.
 
