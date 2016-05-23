@@ -391,7 +391,7 @@ The right-hand-side of the rule references the abstracted-out-variable. The
 digit `2` in the RHS refers to the `*` (match any term) marker in the LHS. The
 RHS also builds a term which has that variable re-abstracted.
 
-Rules 7 and 9 above feature the '*!' special symbol, which means "term
+Rules 7 and 9 above feature the '\*!' special symbol, which means "term
 containing no variables whatsoever", a.k.a. a combinator. Tromp seeks to
 minimize the size of the end result of multi-variable abstractions. Variables
 exist only to get abstracted away, so a term containing multiple variables will
@@ -399,16 +399,16 @@ undergo multiple abstractions. Applying rules 6 and 7 to terms more than once
 ends up making the resulting variable-free terms much larger than they
 otherwise would end up.
 
-Rule 8 above features the '*^' special symbol. This rule triggers an
+Rule 8 above features the '\*^' special symbol. This rule triggers an
 abstraction when it finds two, lexically-identical sub-expressions, in the
-positions described. The two expressions in the RHS denoted by '*!' do not get
+positions described. The two expressions in the RHS denoted by '\*!' do not get
 checked for lexical equality, but must not contain variables for the rule to
 trigger an abstraction.
 
-The "*^" special symbol can appear more than once, should you find it
-interesting to do so. All sub-trees marked with a '*^' must compare identically
+The "\*^" special symbol can appear more than once, should you find it
+interesting to do so. All sub-trees marked with a '\*^' must compare identically
 to trigger the abstraction rule. More than one abstraction rule can contain
-'*^' symbols, but the lexical identity only gets checked during examination of
+'\*^' symbols, but the lexical identity only gets checked during examination of
 a single rule. Lexical identity does not get checked "across rules".
 
 #Interpreter Commands
