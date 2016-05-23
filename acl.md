@@ -2,8 +2,6 @@
 
 ## version 1.2
 
-*last revision: 2011-06-12*
-
 [Bruce Ediger](mailto:bediger@stratigery.com)
 
 # Table of contents
@@ -49,7 +47,7 @@ you can start it from the command line:
 
 The interpreter uses `ACL>` as its prompt for user input. `acl` has a strict
 grammar, so you must type in either a [term](#GRAMMAR) for reduction, or an
-[interpreter command](#interpreter-commands), or a command to [examine a term](#EXAMINE).
+[interpreter command](#interpreter-commands), or a command to [examine a term](#information-about-expressions).
 
 A keyboard interrupt (almost always control-C) can interrupt whatever
 long-running reduction currently takes place. A keyboard interrupt at the
@@ -71,30 +69,44 @@ outermost contraction gets evaluated first.
     -c               enable reduction cycle detection
     -d               debug contractions
     -e               elaborate output
-    -L *filename*    Interpret a file named *filename* before reading user input
-    -N *number*      perform up to *number* contractions on each input expression.
+    -L <filename>    Interpret a file named <filename> before reading user input
+    -N <number>      perform up to <number> contractions on each input expression.
     -p               Don't print any prompt.
     -s               single-step reductions
-    -T *number*      evaluate an expression for up to *number* seconds
+    -T <number>      evaluate an expression for up to <number> seconds
     -t               trace reductions
 
 The `-e` or `-s` options have no use without the `-t` option, but `-t` alone might have some use.
 
-`-L *filename*` can occur more than one time. `acl` will interpret the files in the order they appear on the command line. After interpreting the last (or only) file, it prints the `ACL>` prompt, then waits for interactive user input. This command line flag pre-loads files. To interpret files during an interactive session, use the [`load`](#LOAD) command.
+`-L <filename>` can occur more than one time. `acl` will interpret the files in
+the order they appear on the command line. After interpreting the last (or
+only) file, it prints the `ACL>` prompt, then waits for interactive user input.
+This command line flag pre-loads files. To interpret files during an
+interactive session, use the [`load`](#load) command.
 
 #Using the interpreter
 
 ## Interactive input
 
-I designed `acl` for use as an interactive system, with a user typing CL expressions at a prompt. The interpreter reduces the expression to a normal form (if it has one), or hits some other limit, like a pre-set timeout, count of allowed contractions or the user's patience.
+I designed `acl` for use as an interactive system, with a user typing CL
+expressions at a prompt. The interpreter reduces the expression to a normal
+form (if it has one), or hits some other limit, like a pre-set timeout, count
+of allowed contractions or the user's patience.
 
-After entering an entire expression, the user types "return" or "enter" to trigger evaluation.
+After entering an entire expression, the user types "return" or "enter" to
+trigger evaluation.
 
-The built-in prompt for input is the string `ACL>`. It appears when the interpreter starts up, or has finished reducing whatever expression the user gave it last, or it has executed an interpreter command.
+The built-in prompt for input is the string `ACL>`. It appears when the
+interpreter starts up, or has finished reducing whatever expression the user
+gave it last, or it has executed an interpreter command.
 
-You have to type an end-of-file character (almost always control-D) to quit, as it has no built-in "exit" or "quit" command.
+You have to type an end-of-file character (almost always control-D) to quit, as
+it has no built-in "exit" or "quit" command.
 
-A keyboard interrupt (almost always control-C) can interrupt whatever long-running reduction currently takes place, returning the user to the `ACL>` prompt. A keyboard interrupt at the `ACL>` prompt will cause the interpreter to exit.
+A keyboard interrupt (almost always control-C) can interrupt whatever
+long-running reduction currently takes place, returning the user to the `ACL>`
+prompt. A keyboard interrupt at the `ACL>` prompt will cause the interpreter to
+exit.
 
 ### Non-interactive input
 
@@ -108,17 +120,17 @@ and output redirection.
 Expressions consist of either a single term, or two (perhaps implicitly
 parenthesized) terms. Terms consist of either a [user-defined
 primitive](#defining-primitives) or a variable, or a parenthesized expression.
-The [`reduce`](#REDUCE) command, and [bracket abstraction](#expressing-bracket-abstraction-algorithms) each
+The [`reduce`](#reduce) command, and [bracket abstraction](#expressing-bracket-abstraction-algorithms) each
 produce an expression.
 
-Variables (which can also serve as [abbreviations](#ABBREVS) or names of
+Variables (which can also serve as [abbreviations](#defining-abbreviations) or names of
 [user-defined primitives](#defining-primitives)) look like C or Java style
 identifiers. An identifier consists of a letter, followed by zero or more
 letters or underscores. Variables, abbreviations and user-defined primitives
 share the same name space. You can't have an abbreviation with the same name as
 a primitive.
 
-The interpreter treats combinators and variables as "left associative", the
+The interpreter treats combinators and variables as left associative, the
 standard in the Combinatory Logic literature. That means that an expression
 like this: `I a b c d` ends up getting treated as though it had parentheses
 like this: `((((I a) b) c) d)`
@@ -135,27 +147,31 @@ paired parentheses. It considers strings like `(I)` as syntax errors. You have
 to put at least two terms inside a pair of parentheses. Parentheses must have a
 match.
 
-The interpreter prints out normal forms in minimal-parentheses style. Users have the opportunity to cut-n-paste output back into the input, as output has valid syntax. No keyboard shortcuts exist to take advantage of any previous output.
+The interpreter prints out normal forms in minimal-parentheses style. Users
+have the opportunity to cut-n-paste output back into the input, as output has
+valid syntax. No keyboard shortcuts exist to take advantage of any previous
+output.
 
 #Defining Primitives
 
-`acl` does not implement any built-in primitives. The user must describe desired primitives to the interpreter.
+`acl` does not implement any built-in primitives. The user must describe
+desired primitives to the interpreter.
 
 ## Rules specifying primitives
 
 Defining a primitive means getting the interpreter to read a line having this form:
 
-    rule: *Name* *n<sub>i</sub>* *...* ->  *m<sub>i</sub>* *...</pre>
+    rule: Name n<sub>i</sub> ... ->  m<sub>i</sub> ...
 
-The `*Name*` becomes the primitive's name when used in a CL expression.
-`*Name*` has the same format as a C or Java language identifier: a letter
+The `Name` becomes the primitive's name when used in a CL expression.
+`Name` has the same format as a C or Java language identifier: a letter
 followed by zero or more letters, digits or underscores.
 
-The `*n<sub>i</sub>*` symbols represent ascending-value digits, beginning with
-1\. These consitute the required arguments of the primitive under definition.
+The `n<sub>i</sub>` symbols represent ascending-value digits, beginning with 1.
+These consitute the required arguments of the primitive under definition.
 
-The `*m<sub>i</sub>*` symbols also represent digits, which must also appear as
-`*n<sub>i</sub>*` arguments. They represent the positions of arguments after
+The `m<sub>i</sub>` symbols also represent digits, which must also appear as
+`n<sub>i</sub>` arguments. They represent the positions of arguments after
 the primitive reduces. You can delete, rearrange, duplicate and compose
 arguments, but you can't introduce other non-argument results. You can only
 define "proper" combinators. You can define "regular" or "irregular"
@@ -182,7 +198,7 @@ to exit the interpreter to "delete" pimitives.
 
 ### Primitives versus abbreviations
 
-At first glance, a user defined primitive and an [abbreviation](#ABBREVS)
+At first glance, a user defined primitive and an [abbreviation](#defining-abbreviations)
 appear redundant. Differences exist, both subtle and gross.
 
 One gross difference: primitives only rearrange, delete, duplicate or regroup
@@ -208,30 +224,29 @@ A more subtle distinction exists in that primitives reduce atomically:
 normal-order evaluation doesn't take place "inside" a primitive. An example
 follows to clarify.
 
-<pre>ACL> rule: S 1 2 3 -> 1 3 (2 3)
-ACL> rule: I 1 -> 1
-ACL> def M (S I I)
-ACL> trace on     *show expression after each contraction*
-ACL> detect on    *mark reducible primitives with '\*'*
-ACL> step on      *single-step, pause after each contraction*
-ACL> M M
-S I I (S I I)
-continue? *return*
-[2] I\* (S I I) (I\* (S I I))   *even out-of-order contractible primitives marked with '\*'*
-continue? *return*
-[2] S\* I I (I\* (S I I))
-continue? *return*
-[4] I\* (I\* (S I I)) (I\* (I\* (S I I)))
-continue? *return*
-[3] I\* (S I I) (I\* (I\* (S I I)))
-continue? *return*
-[3] S\* I I (I\* (I\* (S I I)))
-continue? *return*
-[6] I\* (I\* (I\* (S I I))) (I\* (I\* (I\* (S I I))))
-continue? q *return*
-Terminated
-ACL>
-</pre>
+    ACL> rule: S 1 2 3 -> 1 3 (2 3)
+    ACL> rule: I 1 -> 1
+    ACL> def M (S I I)
+    ACL> trace on     #show expression after each contraction
+    ACL> detect on    #mark reducible primitives with '*'
+    ACL> step on      #single-step, pause after each contraction
+    ACL> M M
+    S I I (S I I)
+    continue? <return>
+    [2] I* (S I I) (I* (S I I))   *even out-of-order contractible primitives marked with '*'*
+    continue? <return>
+    [2] S* I I (I* (S I I))
+    continue? <return>
+    [4] I* (I* (S I I)) (I* (I* (S I I)))
+    continue? <return>
+    [3] I* (S I I) (I* (I* (S I I)))
+    continue? <return>
+    [3] S* I I (I* (I* (S I I)))
+    continue? <return>
+    [6] I* (I* (I* (S I I))) (I* (I* (I* (S I I))))
+    continue? q <return>
+    Terminated
+    ACL>
 
 Each abbreviation `M` gets expanded into a term `S I I`. The `S I I` terms get
 evaluated in normal order, leftmost-outermost contraction happens first. This
@@ -240,55 +255,73 @@ might naively hope for.
 
 To achieve an `M M` → `M M` cycle, the user could define `M` as a primitive.
 
-<pre>ACL> rule: M 1 -> 1 1
-ACL> cycles on    *detect cyclical reductions*
-ACL> trace on     *show expression after each contraction*
-ACL> detect on    *mark reducible primitives with '\*'*
-ACL> M M
-M M
-[1] M\* M
-[1] M\* M
-Found a pure cycle of length 1, 1 terms evaluated, ends with ".M M"
-[1] M\* M
-</pre>
+    ACL> rule: M 1 -> 1 1
+    ACL> cycles on    #detect cyclical reductions
+    ACL> trace on     #show expression after each contraction
+    ACL> detect on    #mark reducible primitives with '*'
+    ACL> M M
+    M M
+    [1] M* M
+    [1] M* M
+    Found a pure cycle of length 1, 1 terms evaluated, ends with ".M M"
+    [1] M* M
 
 #Expressing Bracket Abstraction Algorithms
 
-"Bracket abstraction" names the process of creating a CL expression without specified variables, that when evaluated with appropriate arguments, ends up giving you the original expression with the specified variables.
+"Bracket abstraction" names the process of creating a CL expression without
+specified variables, that when evaluated with appropriate arguments, ends up
+giving you the original expression with the specified variables.
 
-The `acl` interpreter uses the conventional square-bracket notation. For example, to create an expression that will duplicate its single argument, one would type:
+The `acl` interpreter uses the conventional square-bracket notation. For
+example, to create an expression that will duplicate its single argument, one
+would type:
 
-`ACL> [x] x x`
+    ACL> [x] x x
 
 You can use more than one variable inside square brackets, separated with commas:
 
-`ACL> [a, b, c] a (b c)`
+    ACL> [a, b, c] a (b c)
 
-The above square-bracketed expression ends up performing three bracket abstractions, abstracting `c` from `a (b c)`, `b` from the resulting expression, and `a` from that expression.
+The above square-bracketed expression ends up performing three bracket
+abstractions, abstracting `c` from `a (b c)`, `b` from the resulting
+expression, and `a` from that expression.
 
-A bracket abstraction makes an expression. You can use abstractions where you might use any other simple or complex expression, defining an abbreviation, a sub-expression of a much larger expression, as an expression to evaluate immediately, or inside another bracket abstraction. For example, you could create Turing's fixed-point combinator like this:
+A bracket abstraction makes an expression. You can use abstractions where you
+might use any other simple or complex expression, defining an abbreviation, a
+sub-expression of a much larger expression, as an expression to evaluate
+immediately, or inside another bracket abstraction. For example, you could
+create Turing's fixed-point combinator like this:
 
-<pre>ACL> [def](#ABBREVS) U [x][y] (x(y y x))
-ACL> def Yturing (U U)
-</pre>
+    ACL> def U [x][y] (x(y y x))
+    ACL> def Yturing (U U)
 
-Note the use of nested bracket abstractions. The abstraction of `y` occurs first, then `x` gets abstracted from the resulting expression.
+Note the use of nested bracket abstractions. The abstraction of `y` occurs
+first, then `x` gets abstracted from the resulting expression.
 
-You could express `[x][y] (x(y y x))` with the alternate form `[x,y] (x(y y x))`. The same nested abstraction occurs.
+You could express `[x][y] (x(y y x))` with the alternate form `[x,y] (x(y y
+x))`. The same nested abstraction occurs.
 
-`acl` allows you to express even complicated bracket abstraction algorithms. You can write rules that match specific terms, or that match general sub-expressions.
+`acl` allows you to express even complicated bracket abstraction algorithms.
+You can write rules that match specific terms, or that match general
+sub-expressions.
 
 ## Bracket Abstraction Rules
 
-You input the abstraction algorithm in the form of rules, one per line, in decreasing order of priority. Each line has this format:
+You input the abstraction algorithm in the form of rules, one per line, in
+decreasing order of priority. Each line has this format:
 
-<pre>abstraction: [_] _lhs_ -> _rhs_</pre>
+    abstraction: [_] lhs -> rhs
 
-The lexical token `[_]` denotes the abstraction of whatever variable the user chooses. It must appear after the `abstraction:` token. It can also appear in the right-hand-side of an abstraction rule, where it will cause recursive abstraction(s).
+The lexical token `[_]` denotes the abstraction of whatever variable the user
+chooses. It must appear after the `abstraction:` token. It can also appear in
+the right-hand-side of an abstraction rule, where it will cause recursive
+abstraction(s).
 
 #### Left Hand Side
 
-The left-hand-side (_lhs_) looks like a valid CL term, except that it can contain one or more special symbols, as well as names of primitives and/or variables:
+The left-hand-side (`lhs`) looks like a valid CL term, except that it can
+contain one or more special symbols, as well as names of primitives and/or
+variables:
 
 *   `_` (underscore) - a "wildcard" for the name of the variable abstracted.
 *   `*` (asterisk) - a wildcard meaning "any term, possibly containing the abstracted variable".
@@ -299,7 +332,9 @@ The left-hand-side (_lhs_) looks like a valid CL term, except that it can contai
 
 #### Right Hand Side
 
-The right-hand-side (_rhs_) also looks like a valid CL term, except that it can contain one or more special symbols, as well as the names of primitives and/or variables:
+The right-hand-side (rhs) also looks like a valid CL term, except that it can
+contain one or more special symbols, as well as the names of primitives and/or
+variables:
 
 *   `[_]` - the abstraction-of-whatever-variable again. Triggers a "re-abstraction" of the term constructed by the right-hand-side.
 *   `_` (plain old underscore), replaced by the abstracted variable.
@@ -307,13 +342,18 @@ The right-hand-side (_rhs_) also looks like a valid CL term, except that it can 
 
 #### Rule Precedence
 
-The order in which the user enters rules amounts to specifying precedence. The first rule entered at the `ACL>` prompt has the highest precedence. The last rule entered has the lowest precedence.
+The order in which the user enters rules amounts to specifying precedence. The
+first rule entered at the `ACL>` prompt has the highest precedence. The last
+rule entered has the lowest precedence.
 
-The user must [define primitives](#defining-primitives) before using them in a right-hand-side. Otherwise, what appears as a "primitive" will actually constitute a free variable with a confusingly identical name.
+The user must [define primitives](#defining-primitives) before using them in a
+right-hand-side. Otherwise, what appears as a "primitive" will actually
+constitute a free variable with a confusingly identical name.
 
 ### Bracket Abstraction Rule Examples
 
-The rule format above allows expression of the standard SKI-basis 4-rule algorithm like this:
+The rule format above allows expression of the standard SKI-basis 4-rule
+algorithm like this:
 
 1.  `abstraction: [_] *- -> K 1`
 2.  `abstraction: [_] _ -> I`
@@ -322,9 +362,12 @@ The rule format above allows expression of the standard SKI-basis 4-rule algorit
 
 In rule 1, the `*-` on lhs gets into the resulting expression as the '1' on the right-hand-side.
 
-Similarly, in rule 4, the two expressions on the lhs, each denoted by an '*', have the variable abstracted ('[_]') in the rhs.
+Similarly, in rule 4, the two expressions on the lhs, each denoted by an '*',
+have the variable abstracted ('[_]') in the rhs.
 
-The 9-rule bracket abstraction algorithm from John Tromp's [Binary Lambda Calculus and Combinatory Logic](http://homepages.cwi.nl/~tromp/cl/LC.pdf) looks like this:
+The 9-rule bracket abstraction algorithm from John Tromp's [Binary Lambda
+Calculus and Combinatory Logic](https://tromp.github.io/cl/LC.pdf) looks like
+this:
 
 1.  `abstraction: [_] S K * -> S K`
 2.  `abstraction: [_] *- -> K 1`
@@ -338,29 +381,47 @@ The 9-rule bracket abstraction algorithm from John Tromp's [Binary Lambda Calcul
 
 Tromp writes rule 5 above as:
 
-<pre>_λ<sup>2</sup>x.(x M x) ≡ λ<sup>2</sup>x.(S S K x M)_</pre>
+    _λ<sup>2</sup>x.(x M x) ≡ λ<sup>2</sup>x.(S S K x M)
 
-The abstracted variable `x` appears in the right- and left-hand-side of the rule as `_` . Tromp's `M` appears as `*` on lhs and `2` on rhs of the `acl` abstraction rule.
+The abstracted variable `x` appears in the right- and left-hand-side of the
+rule as `_` . Tromp's `M` appears as `*` on lhs and `2` on rhs of the `acl`
+abstraction rule.
 
-The right-hand-side of the rule references the abstracted-out-variable. The digit `2` in the RHS refers to the `*` (match any term) marker in the LHS. The RHS also builds a term which has that variable re-abstracted.
+The right-hand-side of the rule references the abstracted-out-variable. The
+digit `2` in the RHS refers to the `*` (match any term) marker in the LHS. The
+RHS also builds a term which has that variable re-abstracted.
 
-Rules 7 and 9 above feature the '*!' special symbol, which means "term containing no variables whatsoever", a.k.a. a combinator. Tromp seeks to minimize the size of the end result of multi-variable abstractions. Variables exist only to get abstracted away, so a term containing multiple variables will undergo multiple abstractions. Applying rules 6 and 7 to terms more than once ends up making the resulting variable-free terms much larger than they otherwise would end up.
+Rules 7 and 9 above feature the '*!' special symbol, which means "term
+containing no variables whatsoever", a.k.a. a combinator. Tromp seeks to
+minimize the size of the end result of multi-variable abstractions. Variables
+exist only to get abstracted away, so a term containing multiple variables will
+undergo multiple abstractions. Applying rules 6 and 7 to terms more than once
+ends up making the resulting variable-free terms much larger than they
+otherwise would end up.
 
-Rule 8 above features the '*^' special symbol. This rule triggers an abstraction when it finds two, lexically-identical sub-expressions, in the positions described. The two expressions in the RHS denoted by '*!' do not get checked for lexical equality, but must not contain variables for the rule to trigger an abstraction.
+Rule 8 above features the '*^' special symbol. This rule triggers an
+abstraction when it finds two, lexically-identical sub-expressions, in the
+positions described. The two expressions in the RHS denoted by '*!' do not get
+checked for lexical equality, but must not contain variables for the rule to
+trigger an abstraction.
 
-The "*^" special symbol can appear more than once, should you find it interesting to do so. All sub-trees marked with a '*^' must compare identically to trigger the abstraction rule. More than one abstraction rule can contain '*^' symbols, but the lexical identity only gets checked during examination of a single rule. Lexical identity does not get checked "across rules".
+The "*^" special symbol can appear more than once, should you find it
+interesting to do so. All sub-trees marked with a '*^' must compare identically
+to trigger the abstraction rule. More than one abstraction rule can contain
+'*^' symbols, but the lexical identity only gets checked during examination of
+a single rule. Lexical identity does not get checked "across rules".
 
 #Interpreter Commands
 
-*   [Defining abbreviations](#ABBREVS)
-*   [Information about expressions](#EXAMINE)
-*   [Detecting reduction cycles](#CYCLES)
-*   [Intermediate output and single-stepping](#OUTPUT)
-*   [Reduction information and control](#REDUCTION)
-*   [Reading in files](#LOAD)
-*   [Printing primitive and abstraction rules](#RULESOUT)
+*   [Defining abbreviations](#defining-abbreviations)
+*   [Information about expressions](#information-about-expressions)
+*   [Detecting reduction cycles](#detecting-reduction-cycles)
+*   [Intermediate output and single-stepping](#intermediate-output-and-single-stepping)
+*   [Reduction information and control](#reduction-information-and-control)
+*   [Reading in files](#reading-in-files)
+*   [Printing primitive and abstraction rules](#printing-primitive-and-abstraction-rules)
 
-## <a name="ABBREVS">Defining abbreviations</a>
+## Defining abbreviations
 
 *   `define _name_ _expression_`
 *   `def _name_ _expression_`
@@ -370,89 +431,131 @@ The "*^" special symbol can appear more than once, should you find it interestin
 
 `def` makes an easy-to-type abbreviation of `define`.
 
-<a name="REDUCE"></a>The `reduce` command actually produces an expression, just like a bracket abstraction. Unlike `define` or `def`, you can use `reduce` anywhere an expression would fit, as part of a larger expression, as part of an abbreviation, or as part of a bracket abstraction.
+The `reduce` command actually produces an expression, just like a bracket
+abstraction. Unlike `define` or `def`, you can use `reduce` anywhere an
+expression would fit, as part of a larger expression, as part of an
+abbreviation, or as part of a bracket abstraction.
 
-`reduce` causes an out-of-order (normal order, leftmost outermost) reduction to take place. The expression next to `reduce` gets interpreted, and the result put back into the original context. `reduce` allows a user to store the normal form of an expression, rather than just a literal expression, as `def` and `define` don't cause any contractions to take place.
+`reduce` causes an out-of-order (normal order, leftmost outermost) reduction to
+take place. The expression next to `reduce` gets interpreted, and the result
+put back into the original context. `reduce` allows a user to store the normal
+form of an expression, rather than just a literal expression, as `def` and
+`define` don't cause any contractions to take place.
 
-## <a name="EXAMINE">Information about expressions</a>
+## Information about expressions
 
 *   `<a name="SIZE">size</a> _expression_` - print the number of atoms in _expression_.
 *   `<a name="LENGTH">length</a> _expression_` - print the number of atoms plus number of applications in _expression_.
 *   `<a name="PRINT">print</a> _expression_` - print human-readable representation, with abbreviations expanded, but without evaluation.
-*   `<a name="PRINTC">printc</a> _expression_` - print [canonical](#CANON) representation, with abbreviations substituted, but without evaluation.
-*   `redexes _expression_` - print a count of possible contractions in _expression_, regardless of order of evaluation.
-*   `_expression_ = _expression_` - determine lexical equivalence of any two expressions, after abbreviation substitution, but without evaluation.
+*   `<a name="PRINTC">printc</a> _expression_` - print [canonical](#canonical-expression-representation) representation, with abbreviations substituted, but without evaluation.
+*   `redexes <expression>` - print a count of possible contractions in _expression_, regardless of order of evaluation.
+*   `<expression> = <expression>` - determine lexical equivalence of any two expressions, after abbreviation substitution, but without evaluation.
 
-`print` lets you see what abbreviations expand to, without evaluation, as does `printc`. The "=" sign lets you determine _lexical_ equality. All combinators, variables and parentheses have to match as strings, otherwise "=" deems the expressions not equivalent. You can put in explicit `reduce` commands on both sides of an "=", otherwise, no evaluation takes place.
+`print` lets you see what abbreviations expand to, without evaluation, as does
+`printc`. The "=" sign lets you determine _lexical_ equality. All combinators,
+variables and parentheses have to match as strings, otherwise "=" deems the
+expressions not equivalent. You can put in explicit `reduce` commands on both
+sides of an "=", otherwise, no evaluation takes place.
 
-`size` and `length` seem redundant, but authorities measure CL expressions different ways. These two methods should cover the vast majority of cases.
+`size` and `length` seem redundant, but authorities measure CL expressions
+different ways. These two methods should cover the vast majority of cases.
 
-#### <a name="CANON">Canonical Expression Representation</a>
+#### Canonical Expression Representation
 
-The `[printc](#PRINTC)` command, and cycle detection output use a canonical form of representing a CL expression.
+The `[printc](#PRINTC)` command, and cycle detection output use a canonical
+form of representing a CL expression.
 
-In this case, "canonical" means: pre-order, depth-first, left-to-right traversal of the parse tree, output of a period (".") for each application, and a space before each combinator or variable.
+In this case, "canonical" means: pre-order, depth-first, left-to-right
+traversal of the parse tree, output of a period (".") for each application, and
+a space before each combinator or variable.
 
 A simple application (`K I`, for example) looks like this: `.K I`
 
 A more complex application (`P R (Q R)`) looks like this: `..P R.Q R`
 
-The advantage to this sort of notation is that every application appears explicitly, and variant, semantically-equivalent parentheses don't appear.
+The advantage to this sort of notation is that every application appears
+explicitly, and variant, semantically-equivalent parentheses don't appear.
 
-## <a name="CYCLES">Detecting reduction cycles</a>
+## Detecting reduction cycles
 
 *   `cycles on|off`
 *   `detect on|off`
 
-Some CL expressions end up creating a cycle. `M M` or `W W W` constitute examples from common bases. After a certain number of contractions, the interpreter encounters an expression it has previously created. If you issue the `cycles on` command, the interpreter keeps track of every expression in the current reduction, and stops when it detects a cyclical reduction.
+Some CL expressions end up creating a cycle. `M M` or `W W W` constitute
+examples from common bases. After a certain number of contractions, the
+interpreter encounters an expression it has previously created. If you issue
+the `cycles on` command, the interpreter keeps track of every expression in the
+current reduction, and stops when it detects a cyclical reduction.
 
-`detect on` causes the interpreter to count and mark possible contraction (with an asterisk), regardless of reduction order. It does "normal order" reduction, but ignores that for the contraction count. This has use with `trace on`.
+`detect on` causes the interpreter to count and mark possible contraction (with
+an asterisk), regardless of reduction order. It does "normal order" reduction,
+but ignores that for the contraction count. This has use with `trace on`.
 
-Turning cycle detection on will add time to an expression's reduction, as will possible contraction detection.
+Turning cycle detection on will add time to an expression's reduction, as will
+possible contraction detection.
 
-## <a name="OUTPUT">Intermediate output and single-stepping</a>
+## Intermediate output and single-stepping
 
 *   `trace on|off`
 *   `elaborate on|off`
 *   `debug on|off`
 *   `step on|off`
 
-You can issue any of these commands without an "on" or "off" argument to inquire about the current state of the directive.
+You can issue any of these commands without an "on" or "off" argument to
+inquire about the current state of the directive.
 
-`trace`, `debug` and `elaborate` provide increasingly verbose output. `trace` shows the expression after each contraction, `debug` adds information about which branch of an application it evaluates, and `elaborate` adds to that information useful in debugging memory allocation problems.
+`trace`, `debug` and `elaborate` provide increasingly verbose output. `trace`
+shows the expression after each contraction, `debug` adds information about
+which branch of an application it evaluates, and `elaborate` adds to that
+information useful in debugging memory allocation problems.
 
-`detect` causes `trace` to also print a count of possible contractions (not all of them normal order reductions), and mark contractable primitives with an asterisk.
+`detect` causes `trace` to also print a count of possible contractions (not all
+of them normal order reductions), and mark contractable primitives with an
+asterisk.
 
-`step on` causes the interpreter to stop after each contraction, print the intermediate expression, and wait, at a `?` prompt for user input. Hitting return goes to the next contraction, `n` or `q` terminates the reduction, and `c` causes it to quit single-stepping.
+`step on` causes the interpreter to stop after each contraction, print the
+intermediate expression, and wait, at a `?` prompt for user input. Hitting
+return goes to the next contraction, `n` or `q` terminates the reduction, and
+`c` causes it to quit single-stepping.
 
 `trace on` will also display steps taken during bracket abstractions.
 
-## <a name="REDUCTION">Reduction information and control</a>
+## Reduction information and control
 
 *   `timer on|off` - turn on/off per-reduction elapsed time output.
 *   `timeout 0|N`- stop reducing after `N` seconds.
 *   `count 0|N` - stop reducing after `N` contractions.
 
-You can turn time outs off by using a 0 (zero) second timeout. Similarly, you can turn contraction-count-limited evaluation off with a 0 (zero) count.
+You can turn time outs off by using a 0 (zero) second timeout. Similarly, you
+can turn contraction-count-limited evaluation off with a 0 (zero) count.
 
 `timer on` also times [bracket abstraction](#expressing-bracket-abstraction-algorithms).
 
-## <a name="LOAD">Reading in files</a>
+## Reading in files
 
-*   `load "*filename*"`
+*   `load "filename"`
 
-You have to double-quote filenames with whitespace or non-alphanumeric characters in them. You can use absolute filenames (beginning with "/") or you can use filenames relative to the current working directory of the `acl` process.
+You have to double-quote filenames with whitespace or non-alphanumeric
+characters in them. You can use absolute filenames (beginning with "/") or you
+can use filenames relative to the current working directory of the `acl`
+process.
 
-## <a name="RULESOUT">Printing primitive and abstraction rules</a>
+## Printing primitive and abstraction rules
 
 *   `rules` - prints out what rules about primitives it has.
 *   `abstractions` - prints out what abstraction rules it has.
 
-Rules about primitives and abstraction rules should appear in a format appropriate for cut-n-paste, that is, in input syntax. Abstraction rules should appear in order of precedence, highest precedence first.
+Rules about primitives and abstraction rules should appear in a format
+appropriate for cut-n-paste, that is, in input syntax. Abstraction rules should
+appear in order of precedence, highest precedence first.
 
 #Examples
 
-The following examples demonstrate either an interesting facet of Combinatory Logic (Klein fourgroup, Grzegorzyk bracket abstraction, AMEN basis) or illustrates part of the interpreter that I found hard to describe (abstraction rules in Tromp's bracket abstraction, and Scott Numerals example). Your tastes may vary.
+The following examples demonstrate either an interesting facet of Combinatory
+Logic (Klein fourgroup, Grzegorzyk bracket abstraction, AMEN basis) or
+illustrates part of the interpreter that I found hard to describe (abstraction
+rules in Tromp's bracket abstraction, and Scott Numerals example). Your tastes
+may vary.
 
 *   [SKI Basis](bases/ski.basis), with "abcf" bracket abstraction.
 *   [SKI Basis](bases/tromp.abstraction), with John Tromp's bracket abstraction.
