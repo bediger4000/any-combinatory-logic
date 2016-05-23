@@ -46,7 +46,7 @@ you can start it from the command line:
     ACL>
 
 The interpreter uses `ACL>` as its prompt for user input. `acl` has a strict
-grammar, so you must type in either a [term](#GRAMMAR) for reduction, or an
+grammar, so you must type in either a term for reduction, or an
 [interpreter command](#interpreter-commands), or a command to [examine a term](#information-about-expressions).
 
 A keyboard interrupt (almost always control-C) can interrupt whatever
@@ -167,11 +167,11 @@ The `Name` becomes the primitive's name when used in a CL expression.
 `Name` has the same format as a C or Java language identifier: a letter
 followed by zero or more letters, digits or underscores.
 
-The `n<sub>i</sub>` symbols represent ascending-value digits, beginning with 1.
+The n<sub>i</sub> symbols represent ascending-value digits, beginning with 1.
 These consitute the required arguments of the primitive under definition.
 
-The `m<sub>i</sub>` symbols also represent digits, which must also appear as
-`n<sub>i</sub>` arguments. They represent the positions of arguments after
+The m<sub>i</sub symbols also represent digits, which must also appear as
+n<sub>i</sub> arguments. They represent the positions of arguments after
 the primitive reduces. You can delete, rearrange, duplicate and compose
 arguments, but you can't introduce other non-argument results. You can only
 define "proper" combinators. You can define "regular" or "irregular"
@@ -444,15 +444,15 @@ form of an expression, rather than just a literal expression, as `def` and
 
 ## Information about expressions
 
-*   `<a name="SIZE">size</a> _expression_` - print the number of atoms in _expression_.
-*   `<a name="LENGTH">length</a> _expression_` - print the number of atoms plus number of applications in _expression_.
-*   `<a name="PRINT">print</a> _expression_` - print human-readable representation, with abbreviations expanded, but without evaluation.
-*   `<a name="PRINTC">printc</a> _expression_` - print [canonical](#canonical-expression-representation) representation, with abbreviations substituted, but without evaluation.
-*   `redexes <expression>` - print a count of possible contractions in _expression_, regardless of order of evaluation.
+*   `size expression` - print the number of atoms in expression.
+*   `length expression` - print the number of atoms plus number of applications in expression.
+*   `print expression` - print human-readable representation, with abbreviations expanded, but without evaluation.
+*   `printc expression` - print [canonical](#canonical-expression-representation) representation, with abbreviations substituted, but without evaluation.
+*   `redexes <expression>` - print a count of possible contractions in expression, regardless of order of evaluation.
 *   `<expression> = <expression>` - determine lexical equivalence of any two expressions, after abbreviation substitution, but without evaluation.
 
 `print` lets you see what abbreviations expand to, without evaluation, as does
-`printc`. The "=" sign lets you determine _lexical_ equality. All combinators,
+`printc`. The "=" sign lets you determine *lexical* equality. All combinators,
 variables and parentheses have to match as strings, otherwise "=" deems the
 expressions not equivalent. You can put in explicit `reduce` commands on both
 sides of an "=", otherwise, no evaluation takes place.
@@ -462,7 +462,7 @@ different ways. These two methods should cover the vast majority of cases.
 
 #### Canonical Expression Representation
 
-The `[printc](#PRINTC)` command, and cycle detection output use a canonical
+The `printc` command, and cycle detection output use a canonical
 form of representing a CL expression.
 
 In this case, "canonical" means: pre-order, depth-first, left-to-right
