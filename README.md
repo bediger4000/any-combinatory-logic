@@ -569,7 +569,6 @@ may vary.
 *   [Scott Numerals](bases/scott.numerals) in an 8-combinator basis, and a 9-rule abstraction algorithm.
 *   [D Numerals](bases/d_numerals), where `[x] x` represents 0, `[x]x x` represents 1, …
 *   [Klein fourgroup](bases/fourgroup), with application as the operator.
-*   [Miscellaneous bases](bases/bases.html)
 
 #Building and installing
 
