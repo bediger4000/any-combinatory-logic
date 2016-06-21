@@ -84,7 +84,7 @@ new_application(struct node *left_child, struct node *right_child)
 	struct node *r = new_node();
 
 	r->typ = APPLICATION;
-	r->name = Atom_string("@");  /* algorithm_d() uses this value */
+	r->name = "@";  /* algorithm_d() uses this value, but only by checking byte value. */
 	r->right = right_child;
 	r->left  = left_child;
 
@@ -333,7 +333,7 @@ new_abs_node(const char *label)
 struct abs_node *
 new_abs_application(struct abs_node *lft, struct abs_node *rght)
 {
-	struct abs_node *r = new_abs_node(Atom_string("@"));
+	struct abs_node *r = new_abs_node("@");
 	r->typ = abs_APPLICATION;
 	r->left = lft;
 	r->right = rght;
