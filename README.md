@@ -1,4 +1,4 @@
-#acl: Generalized Combinatory Logic Interpreter
+# acl: Generalized Combinatory Logic Interpreter
 
 ## version 1.2
 
@@ -37,7 +37,7 @@ bracket abstraction rule definition.
 Without specifying any primitives, the interpreter checks the syntax of
 "applicative structures", where every atomic term constitutes a free variable.
 
-#Starting the interpreter
+# Starting the interpreter
 
 After [building the interpreter's executable](#building-and-installing),
 you can start it from the command line:
@@ -84,7 +84,7 @@ only) file, it prints the `ACL>` prompt, then waits for interactive user input.
 This command line flag pre-loads files. To interpret files during an
 interactive session, use the [`load`](#load) command.
 
-#Using the interpreter
+# Using the interpreter
 
 ## Interactive input
 
@@ -115,7 +115,7 @@ only has use for non-interactive input. The interpreter does read from stdin
 and write to stdout. You can use it as a non-interactive "filter", with input
 and output redirection.
 
-###Grammar, briefly
+### Grammar, briefly
 
 Expressions consist of either a single term, or two (perhaps implicitly
 parenthesized) terms. Terms consist of either a [user-defined
@@ -138,7 +138,7 @@ like this: `((((I a) b) c) d)`
 To apply one complex term to another, the user must parenthesize terms.
 Applying `W (W K)` to `C W` would look like this: `(W (W K)) (C W)`.
 
-###Parentheses
+### Parentheses
 
 Users can parenthesize input expressions as much or as little as they desire,
 up to the limits of left-association and the meaning they wish to convey to the
@@ -152,7 +152,7 @@ have the opportunity to cut-n-paste output back into the input, as output has
 valid syntax. No keyboard shortcuts exist to take advantage of any previous
 output.
 
-#Defining Primitives
+# Defining Primitives
 
 `acl` does not implement any built-in primitives. The user must describe
 desired primitives to the interpreter.
@@ -266,7 +266,7 @@ To achieve an `M M` → `M M` cycle, the user could define `M` as a primitive.
     Found a pure cycle of length 1, 1 terms evaluated, ends with ".M M"
     [1] M* M
 
-#Expressing Bracket Abstraction Algorithms
+# Expressing Bracket Abstraction Algorithms
 
 "Bracket abstraction" names the process of creating a CL expression without
 specified variables, that when evaluated with appropriate arguments, ends up
@@ -411,7 +411,7 @@ to trigger the abstraction rule. More than one abstraction rule can contain
 '\*^' symbols, but the lexical identity only gets checked during examination of
 a single rule. Lexical identity does not get checked "across rules".
 
-#Interpreter Commands
+# Interpreter Commands
 
 *   [Defining abbreviations](#defining-abbreviations)
 *   [Information about expressions](#information-about-expressions)
@@ -549,7 +549,7 @@ Rules about primitives and abstraction rules should appear in a format
 appropriate for cut-n-paste, that is, in input syntax. Abstraction rules should
 appear in order of precedence, highest precedence first.
 
-#Examples
+# Examples
 
 The following examples demonstrate either an interesting facet of Combinatory
 Logic (Klein fourgroup, Grzegorzyk bracket abstraction, AMEN basis) or
@@ -570,7 +570,7 @@ may vary.
 *   [D Numerals](bases/d_numerals), where `[x] x` represents 0, `[x]x x` represents 1, …
 *   [Klein fourgroup](bases/fourgroup), with application as the operator.
 
-#Building and installing
+# Building and installing
 
 I developed this program on Slackware Linux 12.0, and Arch Linux. I used the C
 compilers GCC, [LCC](http://www.cs.princeton.edu/software/lcc/),
