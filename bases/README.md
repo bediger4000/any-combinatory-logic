@@ -18,7 +18,7 @@
 I'm pretty sure that {S, N} is not a basis, less sure that {S, N, T} is
 not a basis.  I could not get [Prover9](https://www.cs.unm.edu/~mccune/mace4/) to give me an
 expression acting as <strong>C</strong>, <strong>T</strong> or <strong>K</strong>.
-{S, N, C} definitely constitutes a combinagtorially complete basis.
+{S, N, C} definitely constitutes a combinatorially complete basis.
 
 Even though {S, N} probably isn't a basis, {B,W,C,N} does constitute a basis,
 since <kbd><strong>C N</strong></kbd> acts like <kbd><strong>K</strong></kbd>,
